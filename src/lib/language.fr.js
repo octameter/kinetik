@@ -24,7 +24,7 @@ Language.data.fr = {
 	CLEARANCE: "Cl <i>en L/h</i>",
 	CLEARANCE_INFO: "clairance calculée",
 	ELIKONSTANTE: "k<sub>e</sub> <i>in <sup>-h</sup></i>",
-	ELIKONSTANTE_INFO: "Berechnete Eliminationskonstante",
+	ELIKONSTANTE_INFO: "d'élimination calculée constante",
 	
 	PERSONALISIERUNG:"<b>personnalisation</b>",
 	//de la concentration à l'équilibre (Css, Concentration steady state)
