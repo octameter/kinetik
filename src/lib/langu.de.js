@@ -1,4 +1,4 @@
-langu.it = {
+langu.de = {
 
 	DOSIERUNG : "<b>Dosierung</b>",
 	DOSIERUNG_INFO : "Verabreichte Dosierung",
@@ -10,6 +10,8 @@ langu.it = {
 	INTERVALL_INFO: "Dosierungsintervall",
 	PREDOSE: "C<sub>min</sub> <i>in mg/L</i>",
 	PREDOSE_INFO: "Steady-State-Konzentration bei erster Dosierung",
+	SPRACHE: "Sprache",
+	SPRACHE_INFO: "Sprache wählen",
 	
 	POPULATIONSDATEN : "<b>Populationsdaten</b>",
 	POPULATIONSDATEN_INFO : "PK Parameter aus der Fachinfo",

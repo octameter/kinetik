@@ -34,3 +34,8 @@
  	fieldset > input {
  		width: 60px;
  	}
+ 	
+ 	fieldset > select {
+ 		opacity: 0.8;
+ 		width: 64px;
+ 	}

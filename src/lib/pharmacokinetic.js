@@ -13,6 +13,177 @@ function getValue(id) {
 	return parseFloat( document.getElementById(id).value );	
 }
 
+Pharmacokinetic = function(){
+	
+	graph = new Graph("graph", 900, 600, 50);
+	
+	setLanguage();
+	
+};
+
+Pharmacokinetic.prototype.registerListener = function() {
+	
+	var inputs = document.getElementsByTagName("input");
+	
+	for(var i = 0; i < inputs.length; i++){
+		
+		inputs[i].addEventListener("change", this.visualize, false);
+	}
+};
+
+Pharmacokinetic.prototype.visualize = function(event) {
+
+	param = new Kinetic();
+
+	if(!event)
+	{			
+
+		if( window.location.hash.length > 0) {
+
+			window.location.hash.replace("#","").split("&").forEach(zuweisen);
+		}
+
+		param.toInput();
+
+	}else{
+
+		param.fromInput();					
+
+    	window.location.hash = param.toHash();
+	}
+
+	// Berechnete Werte von Eingabe
+	var dosis = param.dosierung * param.bio / 100;  
+ 	var ka  = ( param.tin > 0 ) ? Math.log(2) / param.tin : 0;  
+ 	var cl  = Math.log(2) * param.v / param.hwz;
+ 	var ke  = Math.log(2) / param.hwz;
+ 	var c0 = dosis / param.v;
+ 	
+ 	getElement( "clo" ).value = cl.toFixed(3);    	
+ 	getElement( "keo" ).value = ke.toFixed(4);
+
+ 	if(param.hwz == 0 || param.v == 0){
+ 		graph.board(100, 100);	
+ 		
+	    	var abszisse = translate("ABSZISSE");
+	    	var ordinate = translate("ORDINATE");
+ 	    graph.coordinates(abszisse, ordinate);
+ 	    
+ 		return;
+ 	}
+
+		// Concentration Max
+		// Standard
+ 	var cmax = ( c0 / param.getAccu(ke, param.tau) ) + param.cssmin;
+
+		if(param.c1 > 0 || param.t1 > 0){
+ 		getElement("co1").style.opacity = "1";     			
+		}else{
+ 		getElement("co1").style.opacity = "0.6";     			     						     			 			     			
+		}
+		
+		if((param.c1 > 0 && param.t1 > 0 ) && (param.c2 > 0 || param.t2 > 0)){
+ 		getElement("co2").style.opacity = "1";     			
+		}else{
+ 		getElement("co2").style.opacity = "0.6";     			     			
+		}
+
+		getElement("cv1").value = 0;
+		getElement("hwz1").value = 0;
+		getElement("cv2").value = 0;
+		getElement("hwz2").value = 0;
+		getElement("co3").style.opacity = "0.6";
+		getElement("co4").style.opacity = "0.6";
+
+		// Reset
+		translate("RECHENART","RECHENART");
+		// Range Volumen und Eliminiation variiert
+		if(param.c1 > 0 && param.t1 > 0 && param.c2 == 0 && param.t2 == 0){     			
+		// Volumen a)
+	    	var cv1a = param.getVolume( dosis, param.tau, param.c1, param.t1, ke, ka);
+ 		var cke1a = ke;
+ 		var ccssmin1a = param.getConcentration( dosis, param.tau, cv1a, 0, ke, ka); 
+ 		// Max
+	    	cmax = Math.max( cmax, ( (dosis / cv1a) + ccssmin1a) );
+ 		getElement("cv1").value = cv1a.toFixed(2);
+ 		getElement("hwz1").value = (Math.log(2) / ke ).toFixed(1);
+
+	    	// Elimination b)
+	    	var ccssmax1b = param.getConcentration( dosis, param.tau, param.v, param.t1, ke, ka);
+		var cke1b = param.getElimination(ke, c0, param.c1, ccssmax1b );
+ 		var cv1b = param.getVolume( dosis, param.tau, param.c1, param.t1, cke1b, ka);
+ 		var ccssmin1b = param.getConcentration( dosis, param.tau, cv1b, 0, cke1b, ka); 
+ 		// Max
+	    	cmax = Math.max( cmax, ( (dosis / cv1b) + ccssmin1b), param.c1, ccssmax1b );
+ 		getElement("cv2").value = cv1b.toFixed(2);
+ 		getElement("hwz2").value = (Math.log(2) / cke1b).toFixed(1);
+
+ 		translate("RECHENART_VARIATION","RECHENART");
+
+ 		getElement("co3").style.opacity = "1";
+ 		getElement("co4").style.opacity = "1";
+		}
+		
+		// Volumen und Elimination genau
+		if(param.c1 > 0 && param.t1 > 0 && param.c2 > 0 && param.t2 > 0){
+			var cke2 = ( Math.log(param.c1) - Math.log(param.c2) ) / ( param.t2 % param.tau - param.t1 % param.tau );
+			var cv2 = param.getVolume( dosis, param.tau, param.c1, param.t1, cke2, ka);
+ 		var ccssmin2 = param.getConcentration( dosis, param.tau, cv2, 0, cke2, ka); 
+ 		// Max
+	    	cmax = Math.max( cmax, ( (dosis / cv2) + ccssmin2), param.c2 );
+ 		getElement("cv1").value = cv2.toFixed(2);
+ 		getElement("hwz1").value = (Math.log(2) / cke2 ).toFixed(1);
+ 		getElement("cv2").value = 0;
+ 		getElement("hwz2").value = 0;
+ 		
+ 		translate("RECHENART_PRECISE","RECHENART");
+
+ 		getElement("co3").style.opacity = "1";
+ 		getElement("co4").style.opacity = "0.6";
+		}
+		
+		// Max andere Kandidaten
+	cmax = Math.max( cmax, getValue("otbi")*1.25, getValue("utbi")*1.25 );
+
+ 	// Time Max
+ 	var tmax = Math.max( param.hwz, param.tau) * 6;
+ 	
+ 	/////////////////////////
+ 	// Graph Build
+	graph.board( tmax, cmax );
+
+ 	var abszisse = translate("ABSZISSE");
+ 	var ordinate = translate("ORDINATE");
+    graph.coordinates(abszisse, ordinate);
+    
+    // Limits
+    graph.limit( getValue("utbi"), "rgba(50  ,255,50,0.4)");
+    graph.limit( getValue("otbi"), "rgba(255,50  ,50,0.4)");
+		
+		graph.auc(param.cssmin, c0, param.tau, ke, ka, "rgba(255,255,255,0.6)","rgba(255,255,255,0.6)");	   		
+		
+		// Berechnungen
+		if(param.c1 > 0 && param.t1 > 0  && param.c2 == 0 && param.t2 == 0){
+ 		graph.auc(ccssmin1a, dosis / cv1a, param.tau, cke1a, ka, "none"  , "rgba(0,150,200,0.6)"  );	   		    		     		
+ 		graph.auc(ccssmin1b, dosis / cv1b, param.tau, cke1b, ka, "none", "rgba(0,200,200,0.6)");	   		    		
+		}
+		
+		if(param.c1 > 0 && param.t1 > 0 && param.c2 > 0 && param.t2 > 0){
+ 		graph.auc(ccssmin2 , dosis / cv2,  param.tau, cke2 , ka, "none", "rgba(0,150,200,0.6)");	   		    		
+		}
+		    		
+		// Punkte
+		if(param.c1 > 0 && param.t1 > 0 && param.c2 == 0 && param.t2 == 0){
+ 		graph.point(param.c1, param.t1, "rgba(0,50,200,0.6)", 8);  	
+		}
+		if(param.c1 > 0 && param.t1 > 0 && param.c2 > 0 && param.t2 > 0){
+ 		graph.point(param.c1, param.t1, "rgba(0,50,200,0.6)", 8);  	
+			graph.point(param.c2, param.t2, "rgba(0,100,200,0.6)", 8);  		
+		}
+		   		    		
+		graph.legende();
+};
+
 
 // Konstruktor
 function Graph(id, width, height, padding) {
@@ -368,51 +539,9 @@ function Graph(id, width, height, padding) {
     		}
     		 
     	};
-    	
-   // LANGUAGE
+
   
-    var langu = {};	
-    	
-    function setLanguage() {
-    	var sprache = document.documentElement.lang;
-    	
-    	if(langu[sprache]){
-    		langu.sprache = sprache;
-    		
-    		translateElements();
-    	}else{
-    		alert("Language File is missing");
-    	}
-    	
-    	
-    }
-    
-    function translateElements() {
-    	
-    	var toTranslate = [];
-    	toTranslate.push("DOSIERUNG","F","DOSIS","INTERVALL","PREDOSE");
-    	toTranslate.push("POPULATIONSDATEN","ABSORPTION","HALBWERTSZEIT","VOLUMEN","CLEARANCE","ELIKONSTANTE");
-    	toTranslate.push("PERSONALISIERUNG","KONZENTRATION1","ZEIT1","KONZENTRATION2","ZEIT2","RECHENART");
-    	toTranslate.push("BEREICH","OBERE_GRENZE","UNTERE_GRENZE");
-    	
-    	toTranslate.forEach(function(e){
-    		translate(e,e);
-    	});
-    	
-    }
 
-    function translate(vokabel, element) {
-
-    	var woerterbuch = langu[ langu.sprache ];
-    	
-    	if(element){
-			temp = getElement(element).innerHTML = woerterbuch[vokabel];
-			getElement(element).title = woerterbuch[vokabel+"_INFO"];	   
-    	}else{
-    		return woerterbuch[vokabel];
-    	}
-
-    }
 
 
 	

@@ -10,6 +10,8 @@ langu.fr = {
 	INTERVALL_INFO: "Intervalle entre les doses",
 	PREDOSE: "C<sub>min</sub> <i>en mg/L</i>",
 	PREDOSE_INFO: "concentration stable obtenue au premier dosage",
+	SPRACHE: "langue",
+	SPRACHE_INFO: "sélectionner la langue",
 	
 	POPULATIONSDATEN : "<b>données démographiques</b>",
 	POPULATIONSDATEN_INFO : "paramètres pharmacocinétiques issus de la documentation technique",
@@ -50,6 +52,5 @@ langu.fr = {
 	UNTERE_GRENZE_INFO: "Limite inférieure de la concentration minimale",
 		
 	ORDINATE : "C mg/L",
-	ABSZISSE : "t en h"
-	
+	ABSZISSE : "t en h"	
 };
