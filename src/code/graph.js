@@ -1,6 +1,6 @@
 // Utility functions
 function zuweisen(e){
-	if( e.split("=")[0 ] in param){
+	if( e.split("=")[0] in param){
 		param[ e.split("=")[0] ] = parseFloat( e.split("=")[1] );
 	}
 }
