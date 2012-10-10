@@ -1,4 +1,4 @@
-langu.de = {
+Language.data.it = {
 
 	DOSIERUNG : "<b>Dosierung</b>",
 	DOSIERUNG_INFO : "Verabreichte Dosierung",

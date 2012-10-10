@@ -1,4 +1,4 @@
-langu.fr = {
+Language.data.fr = {
 
 	DOSIERUNG : "<b>dose</b>",
 	DOSIERUNG_INFO : "dose administrée",

@@ -31,11 +31,16 @@
         border-radius: 6px;
  	} 		
  	
- 	fieldset > input {
- 		width: 60px;
+ 	fieldset > legend {
+ 	 	color:#FFFFFF;
  	}
  	
- 	fieldset > select {
- 		opacity: 0.8;
+ 	fieldset input {
+ 		width: 60px;
+ 		height: 20px;
+ 	}
+ 	
+ 	fieldset select {
  		width: 64px;
+ 		padding: 3px;
  	}

@@ -15,22 +15,19 @@
     </style>
     
 	<!-- LANGUAGE FILE EINBINDEN -->
-    <script type="text/javascript" src="lib/langu.js"></script>     
-    <script type="text/javascript" src="lib/langu.de.js"></script>     
-    <script type="text/javascript" src="lib/langu.fr.js"></script>     
+    <script type="text/javascript" src="lib/language.js"></script>     
+    <script type="text/javascript" src="lib/language.de.js"></script>     
+    <script type="text/javascript" src="lib/language.fr.js"></script>     
 
 	<!-- PHARMACOKINETIC -->
     <script type="text/javascript" src="lib/pharmacokinetic.js"></script>     
     
     <script type="text/javascript"><!--
     
-	    window.onload = function() {
-    	
-			var pk = new Pharmacokinetic();
-			pk.registerListener();
-			
-			pk.visualize();
-			
+	    window.onload = function() 
+	    {
+    		// Initialize Default
+			new Pharmacokinetic();
 	    }
 
 
@@ -38,8 +35,6 @@
    </head>
    
    <body class="wrapper">
-   
-
 
    		<div id="viewPortId" class="viewPort" >
    		
@@ -59,7 +54,7 @@
 					<input type="number" id="cssmini" name="cssi" min="0" max="1000"  />	
 					<label id="PREDOSE" for="cssmini"></label>			
 			   		<hr/>
-			   		<select id="sprache" onchange="setLanguage(this)">
+			   		<select id="sprache" >
 			   			<option value="de" selected>DE</option>
 			   			<option value="fr" >FR</option>
 			   			<option value="it" >IT</option>
@@ -91,23 +86,23 @@
 		  			<legend id="PERSONALISIERUNG"></legend>
 
 			  			<p id="co1" style="padding:0px;margin:0px;background-color:rgba(0,50,200, 0.6);opacity:0.6">
-							<input type="number" id="c1i" min="1" max="1000" style="width:55px" />
+							<input type="number" id="c1i" min="1" max="1000" value="0" style="width:55px" />
 							<label id="KONZENTRATION1" for="c1i" ></label>
-							<input type="number" id="t1i" min="1" max="1000" style="width:55px"/>
+							<input type="number" id="t1i" min="1" max="1000" value="0" style="width:55px"/>
 							<label id ="ZEIT1" for="t1i" ></label>
 						</p>
 	  				<hr/>
 			  			<p id="co2" style="padding:0px;margin:0px;background-color:rgba(0,100,200, 0.6);opacity:0.6">
-							<input type="number" id="c2i" min="1" max="1000"  style="width:55px"/>
+							<input type="number" id="c2i" min="1" max="1000"  value="0" style="width:55px"/>
 							<label id="KONZENTRATION2" for="c2i" ></label>
-							<input type="number" id="t2i" min="1" max="1000" style="width:55px" />
+							<input type="number" id="t2i" min="1" max="1000" value="0" style="width:55px" />
 							<label id="ZEIT2" for="t2i" ></label>	
 						</p>
 					<hr/>
-					<label id="RECHENART"></label>	
+						<label id="RECHENART"></label>	
 					<hr/>
 			  			<p id="co3" style="padding:0px;margin:0px;background-color:rgba(0,150,200, 0.6);opacity:0.6">
-							<input type="number" id="cv1" style="width:60px;"  disabled/>
+							<input type="number" id="cv1" style="width:60px;" disabled/>
 							<label for="cv1">V</label>	
 							<input type="number" id="hwz1" style="width:60px;" disabled/>
 							<label for="hwz1">t<sub>1\2</sub></label>	
@@ -125,12 +120,12 @@
 		  			<legend id="BEREICH"></legend>
 
 		  			<p style="padding:0px;margin:0px;background-color:rgba(255,50,50,0.4);">
-						<input type="number" id="otbi" min="1" max="10000" style="width:60px;"  />
+						<input type="number" id="otbi" min="1" max="10000" value="0" style="width:60px;"  />
 						<label id="OBERE_GRENZE" for="otbi" ></label>
 					</p>
 					<hr/>
 		  			<p style="padding:0px;margin:0px;background-color:rgba(50,255,50,0.4);">
-						<input type="number" id="utbi" min="1" max="10000" style="width:60px;"   />
+						<input type="number" id="utbi" min="1" max="10000" value="0" style="width:60px;"   />
 						<label id="UNTERE_GRENZE" for="utbi" ></label>	
 				</fieldset>
 
@@ -139,17 +134,17 @@
 	  		<div id="graph" style="position: relative;"></div>
 
    		</div>	
+	   	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-9955206-2']);
+		_gaq.push(['_setDomainName', 'epha.ch']);
+		_gaq.push(['_trackPageview']);
+	
+		(function() {
+		  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+		</script>
    </body>
-   	<script type="text/javascript">
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-9955206-2']);
-	_gaq.push(['_setDomainName', 'epha.ch']);
-	_gaq.push(['_trackPageview']);
-
-	(function() {
-	  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-	</script>
 </html>
