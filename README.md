@@ -4,7 +4,7 @@
 Visualize (HTML5) plasma concentration time curve based on dose and concentrations. Calculated PK parameters enable to personalize drug dose. 
 
 ##Quick start
-Use the following <a target="_blank" href="http://pharmakokinetic.epha.ch/#bio=100&dosierung=2000&tau=12&hwz=10&v=42&c1=15&t1=11&otb=40&utb=15">link</a> to take a test drive.
+Use the following <a target="_blank" href="http://pharmacokinetic.epha.ch/#bio=100&dosierung=2000&tau=12&hwz=10&v=42&c1=15&t1=11&otb=40&utb=15">link</a> to take a test drive.
 
 ##Use case
 The patient receives a substance, which should be monitored. Plasma concentrations of the substance is measured and can be compared to, what would be expected in the normal population. The personalized PK parameters can then be used to predict the plasma concentration time curve based on the dose adjustment. 
