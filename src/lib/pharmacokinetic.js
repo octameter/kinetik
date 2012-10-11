@@ -31,6 +31,8 @@
 		
 		var pharmacokinetic = this;
 		
+		if(!document.getElementById("sprache")) return;
+		
 		document.getElementById("sprache").addEventListener("change", function(event)
 		{
 			language.setLanguage(this);
@@ -556,7 +558,10 @@
 	    			
 	    			if(typeof(this[parameter]) == "number"){
 	
-	    				getElement(parameter+"i").value = this[parameter];
+	    				if(getElement(parameter+"i"))
+    					{
+	    					getElement(parameter+"i").value = this[parameter];    					
+    					}
 	    			}  			
 	    		}
 	    	};
