@@ -17,7 +17,7 @@ Language.data.en = {
 	POPULATIONSDATEN_INFO : "PK parameters in summary of product characteristics",
 	ABSORPTION: "t<sub>in</sub> <i>in h</i>",
 	ABSORPTION_INFO: "Half-life of absorption after oral administration",
-	HALBWERTSZEIT: "t<sub>1\2</sub> <i>in h</i>",
+	HALBWERTSZEIT: "t<sub>1/2</sub> <i>in h</i>",
 	HALBWERTSZEIT_INFO: "Time to reach half of plasma concentration",
 	VOLUMEN: "V <i>in L</i>",
 	VOLUMEN_INFO: "Volume of distribution",

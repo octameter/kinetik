@@ -17,7 +17,7 @@ Language.data.fr = {
 	POPULATIONSDATEN_INFO : "paramètres pharmacocinétiques issus de la documentation technique",
 	ABSORPTION: "t<sub>en</sub> <i>en heures</i>",
 	ABSORPTION_INFO: "temps de demie-vie d'absorption après administration par voie orale",
-	HALBWERTSZEIT: "t<sub>1\2</sub> <i>en heures</i>",
+	HALBWERTSZEIT: "t<sub>1/2</sub> <i>en heures</i>",
 	HALBWERTSZEIT_INFO: "temps de demie-vie",
 	VOLUMEN: "V <i>en litres</i>",
 	VOLUMEN_INFO: "volume de distribution",

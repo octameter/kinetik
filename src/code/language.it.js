@@ -17,7 +17,7 @@ Language.data.it = {
 	POPULATIONSDATEN_INFO : "PK Parameter aus der Fachinfo",
 	ABSORPTION: "t<sub>in</sub> <i>in h</i>",
 	ABSORPTION_INFO: "Halbwertszeit der Absorbtion nach oraler Gabe",
-	HALBWERTSZEIT: "t<sub>1\2</sub> <i>in h</i>",
+	HALBWERTSZEIT: "t<sub>1/2</sub> <i>in h</i>",
 	HALBWERTSZEIT_INFO: "Halbwertszeit der Konzentration",
 	VOLUMEN: "V <i>in L</i>",
 	VOLUMEN_INFO: "Verteilungsvolumen",
