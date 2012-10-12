@@ -262,6 +262,7 @@
 					
 			var container = document.createElement("div");
 			container.style["position"] = "relative";
+			container.style["overflow"] = "visible";
 						
 			var parent = dummy.parentNode;
 			parent.replaceChild(container, dummy);
@@ -306,6 +307,7 @@
     		svg.id = "spiegel";
     			
     		svg.style.position = "absolute";
+    		svg.style.overflow = "visible";
     		svg.style.top = "0px";
     		svg.style.left = "0px";
     		svg.style.width = this.width +"px";
@@ -338,28 +340,49 @@
     		
     		var svg = document.getElementById("spiegel");
     		
-	 		var legende = document.createElementNS("http://www.w3.org/2000/svg", "text");
-	 		legende.id = "legende";
-	 		legende.setAttribute("visibility","collapse");
-	 		svg.appendChild(legende);
-    		
+    		var box = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    		box.id = "box";
+    		box.setAttribute("visibility","hidden");
+    		box.setAttribute("fill", "rgba(100,100,100,0.8)" );
+    		box.setAttribute("stroke", "rgba(204,204,204,0.8)" );
+    		svg.appendChild(box);
+	 		
+	 		var legend = document.createElementNS("http://www.w3.org/2000/svg", "text");
+	 		legend.setAttribute("visibility","hidden");
+	 		legend.setAttribute("color", "white" );
+	 		legend.setAttribute("fill", "white");
+	 		legend.setAttribute("fill", "white");
+	 		legend.setAttribute("font-size", "1.2em");
+	 		svg.appendChild(legend);
+	
     		svg.onmouseover = function(event) {     	 		
 
 				if(event.target.id == "punkt"){
 
 					var daten = event.target.getAttributeNS("http://epha.ch/pharmacovigilance", "data");
 					var json = JSON.parse( daten );		
+					
+					var x = event.layerX; 
+					var y = event.layerY - 10;
+					
+					var xy0 = (x)+","+(y);
+					var xy1 = (x + 10)+","+(y - 10);
+					var xy2 = (x + 80)+","+(y - 10);
+					var xy3 = (x + 80)+","+(y - 50);
+					var xy4 = (x - 80)+","+(y - 50);
+					var xy5 = (x - 80)+","+(y - 10);
+					var xy6 = (x - 10)+","+(y - 10);
 
-					legende.setAttribute("fill", "#000000");
-					legende.setAttribute("x", event.layerX -60);
-					legende.setAttribute("y", event.layerY + 30);
-					legende.setAttribute("visibility", "visible");
-					legende.setAttribute("font-size", "1.2em");
-					legende.setAttribute("color", "blue");
-
-					legende.textContent = "C("+json.t.toFixed(0)+")= "+json.c.toFixed(0)+"mg/L";
+					box.setAttribute("visibility", "visible");
+					box.setAttribute("points", xy0+" "+xy1+" "+xy2+" "+xy3+" "+xy4+" "+xy5+" "+xy6);
+					
+					legend.setAttribute("visibility", "visible");
+					legend.setAttribute("x", x - 60);
+					legend.setAttribute("y", y - 25);
+					legend.textContent = "C("+json.t.toFixed(0)+")= "+json.c.toFixed(0)+"mg/L";
 				}else{
-					legende.setAttribute("visibility", "collapse");
+					box.setAttribute("visibility", "hidden");
+					legend.setAttribute("visibility", "hidden");
 				}
     		};
     		
