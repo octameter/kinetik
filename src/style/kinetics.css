@@ -11,11 +11,6 @@
 	  	overflow:scroll;
 	}
    	
-   	.viewPort {
-		width:900px;
-		height:900px;
-		margin: auto;
- 	}
  	
  	#punkt:hover {
  	  stroke:rgba(50,50,50, 0.8);

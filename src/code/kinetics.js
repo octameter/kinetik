@@ -1,16 +1,35 @@
 
-	Pharmacokinetic = function(){
+	Kinetics = function() 
+	{
+		this.language = null;
+		this.data = {};
+	};
+	
+	Kinetics.prototype.start = function() {
 		
-		graph = new Graph("graph", 900, 600, 50);
+		this.graph = new Graph();
 		
 		this.registerListener();
 		
 		this.registerLanguage();
-				
-		this.visualize();
+		
+		this.visualize();		
 	};
+	
+	Kinetics.prototype.stop = function() {
+		
+	};
+	
+	Kinetics.prototype.setData = function(data) {
+		this.data = data;
+	};
+	
+	Kinetics.prototype.getData = function() {
+		return this.data;
+	};
+	
 
-	Pharmacokinetic.prototype.registerListener = function() {
+	Kinetics.prototype.registerListener = function() {
 		
 		var inputs = document.getElementsByTagName("input");
 		
@@ -21,29 +40,31 @@
 		}
 	};
 
-	Pharmacokinetic.prototype.registerLanguage = function()
+	Kinetics.prototype.registerLanguage = function()
 	{
 		var language = new Language();
 		
-		language.setAuswahlElement("sprache");
+		if(!language.setSelect("sprache")) return;	
 		
-		language.setLanguage();
+		language.getPreference();
 		
-		var pharmacokinetic = this;
-		
-		if(!document.getElementById("sprache")) return;
+		language.vokabeln.push("DOSIERUNG","F","DOSIS","INTERVALL","PREDOSE","SPRACHE");
+		language.vokabeln.push("POPULATIONSDATEN","ABSORPTION","HALBWERTSZEIT","VOLUMEN","CLEARANCE","ELIKONSTANTE");
+		language.vokabeln.push("PERSONALISIERUNG","KONZENTRATION1","ZEIT1","KONZENTRATION2","ZEIT2","RECHENART");
+		language.vokabeln.push("BEREICH","OBERE_GRENZE","UNTERE_GRENZE");
+
+		language.translateAll();
 		
 		document.getElementById("sprache").addEventListener("change", function(event)
 		{
-			language.setLanguage(this);
-			
-			pharmacokinetic.visualize();
+			this.visualize();
 		}
-		, false);
-	
+		.bind(this), false);
+		
+		this.language = language;
 	};
 	
-	Pharmacokinetic.prototype.visualize = function(event) {
+	Kinetics.prototype.visualize = function(event) {
 		
 		param = new Kinetic();
 	
@@ -83,12 +104,12 @@
 	 	getElement( "keo" ).value = ke.toFixed(4);
 	
 	 	if(param.hwz == 0 || param.v == 0){
-	 		graph.board(100, 100);	
+	 		this.graph.board(100, 100);	
 	 		
-		    	var abszisse = Language.translate("ABSZISSE");
-		    	var ordinate = Language.translate("ORDINATE");
+		    	var abszisse = this.language.translate("ABSZISSE");
+		    	var ordinate = this.language.translate("ORDINATE");
 		    	
-	 	    graph.coordinates(abszisse, ordinate);
+	 	    this.graph.coordinates(abszisse, ordinate);
 	 	    
 	 		return;
 	 	}
@@ -121,7 +142,7 @@
 		getElement("co4").style.opacity = "0.6";
 	
 		// Reset
-		Language.translate("RECHENART","RECHENART");
+		this.language.translate("RECHENART","RECHENART");
 		// Range Volumen und Eliminiation variiert
 		if(param.c1 > 0 && param.t1 > 0 && param.c2 == 0 && param.t2 == 0)
 		{     			
@@ -146,7 +167,7 @@
 	 		getElement("cv2").value = cv1b.toFixed(2);
 	 		getElement("hwz2").value = (Math.log(2) / cke1b).toFixed(1);
 	
-	 		Language.translate("RECHENART_VARIATION","RECHENART");
+	 		this.language.translate("RECHENART_VARIATION","RECHENART");
 	
 	 		getElement("co3").style.opacity = "1";
 	 		getElement("co4").style.opacity = "1";
@@ -164,7 +185,7 @@
 	 		getElement("cv2").value = 0;
 	 		getElement("hwz2").value = 0;
 	 		
-	 		Language.translate("RECHENART_PRECISE","RECHENART");
+	 		this.language.translate("RECHENART_PRECISE","RECHENART");
 	
 	 		getElement("co3").style.opacity = "1";
 	 		getElement("co4").style.opacity = "0.6";
@@ -178,61 +199,71 @@
 	 	
 	 	/////////////////////////
 	 	// Graph Build
-		graph.board( tmax, cmax );
+		this.graph.board( tmax, cmax );
 	
-	 	var abszisse = Language.translate("ABSZISSE");
-	 	var ordinate = Language.translate("ORDINATE");
-	    graph.coordinates(abszisse, ordinate);
+	 	var abszisse = this.language.translate("ABSZISSE");
+	 	var ordinate = this.language.translate("ORDINATE");
+	    this.graph.coordinates(abszisse, ordinate);
 	    
 	    // Limits
-	    graph.limit( getValue("utbi"), "rgba(50  ,255,50,0.4)");
-	    graph.limit( getValue("otbi"), "rgba(255,50  ,50,0.4)");
+	    this.graph.limit( getValue("utbi"), "rgba(50  ,255,50,0.4)");
+	    this.graph.limit( getValue("otbi"), "rgba(255,50  ,50,0.4)");
 			
-		graph.auc(param.cssmin, c0, param.tau, ke, ka, "rgba(255,255,255,0.6)","rgba(255,255,255,0.6)");	   		
+	    this.graph.auc(param.cssmin, c0, param.tau, ke, ka, "rgba(255,255,255,0.6)","rgba(255,255,255,0.6)");	   		
 			
 		// Berechnungen
 		if(param.c1 > 0 && param.t1 > 0  && param.c2 == 0 && param.t2 == 0)
 		{
-			graph.auc(ccssmin1a, dosis / cv1a, param.tau, cke1a, ka, "none"  , "rgba(0,150,200,0.6)"  );	   		    		     		
-			graph.auc(ccssmin1b, dosis / cv1b, param.tau, cke1b, ka, "none", "rgba(0,200,200,0.6)");	   		    		
+			this.graph.auc(ccssmin1a, dosis / cv1a, param.tau, cke1a, ka, "none"  , "rgba(0,150,200,0.6)"  );	   		    		     		
+			this.graph.auc(ccssmin1b, dosis / cv1b, param.tau, cke1b, ka, "none", "rgba(0,200,200,0.6)");	   		    		
 		}
 			
 		if(param.c1 > 0 && param.t1 > 0 && param.c2 > 0 && param.t2 > 0)
 		{
-			graph.auc(ccssmin2 , dosis / cv2,  param.tau, cke2 , ka, "none", "rgba(0,150,200,0.6)");	   		    		
+			this.graph.auc(ccssmin2 , dosis / cv2,  param.tau, cke2 , ka, "none", "rgba(0,150,200,0.6)");	   		    		
 		}
 		    		
 		// Punkte
 		if(param.c1 > 0 && param.t1 > 0 && param.c2 == 0 && param.t2 == 0)
 		{
-			graph.point(param.c1, param.t1, "rgba(0,50,200,0.6)", 8);  	
+			this.graph.point(param.c1, param.t1, "rgba(0,50,200,0.6)", 8);  	
 		}
 		if(param.c1 > 0 && param.t1 > 0 && param.c2 > 0 && param.t2 > 0)
 		{
-			graph.point(param.c1, param.t1, "rgba(0,50,200,0.6)", 8);  	
-			graph.point(param.c2, param.t2, "rgba(0,100,200,0.6)", 8);  		
+			this.graph.point(param.c1, param.t1, "rgba(0,50,200,0.6)", 8);  	
+			this.graph.point(param.c2, param.t2, "rgba(0,100,200,0.6)", 8);  		
 		}
 		   		    		
-		graph.legende();
+		this.graph.legende();
 	};
 
 
 		// Konstruktor
-		Graph = function(id, width, height, padding) {
+		Graph = function() {
 	
-	
+			var dummy = document.getElementsByTagName("kinetics")[0];
+			
+			if(!dummy) return;
+					
+			var container = document.createElement("div");
+			container.style["position"] = "relative";
+						
+			var parent = dummy.parentNode;
+			parent.replaceChild(container, dummy);
+			
 			// Container
-			this.view = document.getElementById(id);
+			this.view = container; 
 	
 			// Dimensionen
-			this.width = width;
-			this.height = height; 		
-	
+			this.width = Number(dummy.getAttribute("width"));
+			this.height = Number(dummy.getAttribute("height"));
+			this.padding = Number(dummy.getAttribute("padding"));
+
 			// Ursprung
-			this.x0 = padding;
-			this.xN = this.width - padding;
-			this.y0 = this.height - padding;
-			this.yN = padding;
+			this.x0 = this.padding;
+			this.xN = this.width - this.padding;
+			this.y0 = this.height - this.padding;
+			this.yN = this.padding;
 	
 			this.x = function(t) {
 				return (this.x0 + ( t * this.xCorr ));

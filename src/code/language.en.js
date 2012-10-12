@@ -1,7 +1,7 @@
 Language.data.en = {
 
-	DOSIERUNG : "<b>Dosage</b>",
-	DOSIERUNG_INFO : "Applied dosage",
+	DOSIERUNG : "<b>Dose</b>",
+	DOSIERUNG_INFO : "Dose and interval",
 	F: "F <i>in %</i>",
 	F_INFO: "Bioavailability",
 	DOSIS: "D <i>in mg</i>",
@@ -20,7 +20,7 @@ Language.data.en = {
 	HALBWERTSZEIT: "t<sub>1\2</sub> <i>in h</i>",
 	HALBWERTSZEIT_INFO: "Time to reach half of plasma concentration",
 	VOLUMEN: "V <i>in L</i>",
-	VOLUMEN_INFO: "Volume",
+	VOLUMEN_INFO: "Volume of distribution",
 	CLEARANCE: "Cl <i>in L/h</i>",
 	CLEARANCE_INFO: "Calculated clearance",
 	ELIKONSTANTE: "k<sub>e</sub> <i>in <sup>-h</sup></i>",

@@ -23,14 +23,15 @@
     <script type="text/javascript" src="code/language.it.js"></script>     
 
 	<!-- PHARMACOKINETIC -->
-    <script type="text/javascript" src="code/pharmacokinetic.js"></script>     
+    <script type="text/javascript" src="code/kinetics.js"></script>     
     
     <script type="text/javascript"><!--
     
 	    window.onload = function() 
 	    {
     		// Initialize Default
-			new Pharmacokinetic();
+			var kinetics = new Kinetics();
+    		kinetics.start();
 	    }
 
 
@@ -51,7 +52,7 @@
    </head>
    <body>
 
-   		<div id="viewPortId" class="viewPort" >
+   		<div style="width:900px; height:900px; margin:auto;">
    		
 		  	<form id="werte">
 
@@ -147,7 +148,7 @@
 
 			</form>
 
-	  		<div id="graph" style="position: relative;"></div>
+	  		<kinetics width="900" height="600" padding="50">
 
    		</div>	
 

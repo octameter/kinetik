@@ -1,61 +1,82 @@
 
-Language = function() 
-{	
-	this.element = null;
 	
-	this.sprache = document.documentElement.lang;
-};
-
-	Language.data = {};
-    	
-	Language.prototype.setAuswahlElement = function(element)
+	// Konstructor
+	Language = function() 
 	{
-		this.element = document.getElementById(element);		
+		this.sprachen = Language.data;
+		
+		this.select = null;
+		
+		this.vokabeln = [];
 	};
 	
-	Language.prototype.setAuswahl = function()
+	// For files to have a place to live
+	Language.data = {};
+
+	Language.prototype.sprache = document.documentElement.lang;
+	
+	Language.prototype.setSelect = function(element)
 	{
-		for(var i = 0; i < this.element.options.length; i++)
+		this.select = document.getElementById(element);	
+		
+		if(this.select)
 		{
-			if(this.sprache === this.element.options[i].value)
+			this.select.addEventListener("change", function(event)
 			{
-				this.element.options[i].selected = true;
+				this.setLanguage(event.target);
+			}
+			.bind(this), false);		
+		}
+		
+		return (!!this.select);
+	};
+	
+	Language.prototype.setOption = function()
+	{
+		for(var i = 0; i < this.select.options.length; i++)
+		{
+			if(this.sprache == this.select.options[i].value)
+			{
+				this.select.options[i].selected = true;
 			}
 			else
 			{
-				this.element.options[i].selected = false;				
+				this.select.options[i].selected = false;				
 			}
+		}
+
+	};
+	
+	Language.prototype.getPreference = function()
+	{	
+		if(window["localStorage"] && window["localStorage"].sprache)
+		{
+			this.sprache = window["localStorage"].sprache;	
+			
+			this.setOption();
+		}
+	};
+	
+	Language.prototype.setPreference = function()
+	{
+		if(window["localStorage"])
+		{
+			window["localStorage"].sprache = this.sprache;
 		}
 	};
 	
 	Language.prototype.setLanguage = function(event) 
-	{
-    	
+	{   	
     	if(event)
     	{
     		var idx = event.selectedIndex;
     		this.sprache = event.options[idx].value;
     	}
-    	else
-    	{
-    		if(window["localStorage"] && window["localStorage"].sprache)
-    		{
-    			this.sprache = window["localStorage"].sprache;	
-    			this.setAuswahl();
-    		}
-	
-    	}
     	
-    	if(Language.data[this.sprache])
-    	{
-    		Language.data.sprache = this.sprache;
-    		this.translateElements();
-    		
-    		if(window["localStorage"])
-    		{
-    			window["localStorage"].sprache = this.sprache;
-    		}
-
+    	if( this.sprachen[ this.sprache ] )
+    	{   		
+    		this.translateAll();
+    		this.setPreference();
     	}
     	else
     	{
@@ -64,26 +85,22 @@ Language = function()
 
     };
     
-    Language.prototype.translateElements = function() 
-    {    	
-    	var toTranslate = [];
-    	toTranslate.push("DOSIERUNG","F","DOSIS","INTERVALL","PREDOSE","SPRACHE");
-    	toTranslate.push("POPULATIONSDATEN","ABSORPTION","HALBWERTSZEIT","VOLUMEN","CLEARANCE","ELIKONSTANTE");
-    	toTranslate.push("PERSONALISIERUNG","KONZENTRATION1","ZEIT1","KONZENTRATION2","ZEIT2","RECHENART");
-    	toTranslate.push("BEREICH","OBERE_GRENZE","UNTERE_GRENZE");
-    	
-    	toTranslate.forEach(function(e){
-    		Language.translate(e,e);
-    	});
+    Language.prototype.translateAll = function()
+    {
+    	this.vokabeln.forEach(function(e)
+        {
+    		this.translate(e,e);
+        }
+        .bind(this));
     };
 
-    Language.translate = function(vokabel, element) 
+    Language.prototype.translate = function(vokabel, element) 
     {
-    	var woerterbuch = Language.data[ Language.data.sprache ];
+    	var woerterbuch = this.sprachen[ this.sprache ];
     	
     	if(element){
-			temp = getElement(element).innerHTML = woerterbuch[vokabel];
-			getElement(element).title = woerterbuch[vokabel+"_INFO"];	   
+			document.getElementById(element).innerHTML = woerterbuch[vokabel];
+			document.getElementById(element).title = woerterbuch[vokabel+"_INFO"];	   
     	}else{
     		return woerterbuch[vokabel];
     	}
