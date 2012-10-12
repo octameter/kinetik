@@ -1,5 +1,3 @@
-
-	
 	// Konstructor
 	Language = function() 
 	{
@@ -15,20 +13,34 @@
 
 	Language.prototype.sprache = document.documentElement.lang;
 	
-	Language.prototype.setSelect = function(element)
+	Language.prototype.createSelect = function()
 	{
-		this.select = document.getElementById(element);	
-		
-		if(this.select)
+
+		// IF SELECT IN HTML5 EMBEDDED
+		if(!document.getElementById("sprache"))
 		{
-			this.select.addEventListener("change", function(event)
+			this.select = document.createElement("select");
+			this.select.id = "sprache";
+			
+			for(var i = 0; i < arguments.length; i++)
 			{
-				this.setLanguage(event.target);
-			}
-			.bind(this), false);		
+				var option = document.createElement("option");
+				option.setAttribute("value", arguments[i]);
+				option.innerHTML = arguments[i].toUpperCase();			
+				this.select.appendChild(option);
+			}				
+		} 
+		else
+		{
+			this.select = document.getElementById("sprache");		
 		}
 		
-		return (!!this.select);
+
+		this.select.addEventListener("change", function(event)
+		{
+			this.setLanguage(event.target);
+		}
+		.bind(this), false);		
 	};
 	
 	Language.prototype.setOption = function()
@@ -47,14 +59,17 @@
 
 	};
 	
-	Language.prototype.getPreference = function()
+	Language.prototype.getPreference = function(vorgabe)
 	{	
 		if(window["localStorage"] && window["localStorage"].sprache)
 		{
-			this.sprache = window["localStorage"].sprache;	
-			
-			this.setOption();
+			this.sprache = window["localStorage"].sprache;			
 		}
+		else
+		{
+			this.sprache = vorgabe;
+		}
+		this.setOption();
 	};
 	
 	Language.prototype.setPreference = function()
@@ -98,10 +113,14 @@
     {
     	var woerterbuch = this.sprachen[ this.sprache ];
     	
-    	if(element){
-			document.getElementById(element).innerHTML = woerterbuch[vokabel];
-			document.getElementById(element).title = woerterbuch[vokabel+"_INFO"];	   
-    	}else{
+    	if(element)
+    	{
+    		var e = document.getElementById(element);		
+			e.innerHTML = woerterbuch[vokabel];
+			e.title = woerterbuch[vokabel+"_INFO"];	   
+    	}
+    	else
+    	{
     		return woerterbuch[vokabel];
     	}
     };

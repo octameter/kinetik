@@ -18,7 +18,7 @@ Language.data.de = {
 	ABSORPTION: "t<sub>in</sub> <i>in h</i>",
 	ABSORPTION_INFO: "Halbwertszeit der Absorbtion nach oraler Gabe",
 	HALBWERTSZEIT: "t<sub>1/2</sub> <i>in h</i>",
-	HALBWERTSZEIT_INFO: "Halbwertszeit der Konzentration",
+	HALBWERTSZEIT_INFO: "Halbwertszeit der Elimination",
 	VOLUMEN: "V <i>in L</i>",
 	VOLUMEN_INFO: "Verteilungsvolumen",
 	CLEARANCE: "Cl <i>in L/h</i>",

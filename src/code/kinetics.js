@@ -2,7 +2,10 @@
 	Kinetics = function() 
 	{
 		this.language = null;
+		
 		this.data = {};
+		
+		this.kinetic = null;
 	};
 	
 	Kinetics.prototype.start = function() {
@@ -13,11 +16,13 @@
 		
 		this.registerLanguage();
 		
+		this.kinetic = new Kinetic();
+
 		this.visualize();		
 	};
 	
 	Kinetics.prototype.stop = function() {
-		
+		this.graph = null;
 	};
 	
 	Kinetics.prototype.setData = function(data) {
@@ -33,9 +38,9 @@
 		
 		var inputs = document.getElementsByTagName("input");
 		
-		for(var i = 0; i < inputs.length; i++){
-			
-			inputs[i].addEventListener("change", this.visualize, true);
+		for(var i = 0; i < inputs.length; i++)
+		{	
+			inputs[i].addEventListener("change", this.visualize.bind(this), true);
 			inputs[i].value = 0;
 		}
 	};
@@ -44,9 +49,9 @@
 	{
 		var language = new Language();
 		
-		if(!language.setSelect("sprache")) return;	
+		language.createSelect();	
 		
-		language.getPreference();
+		language.getPreference("de");
 		
 		language.vokabeln.push("DOSIERUNG","F","DOSIS","INTERVALL","PREDOSE","SPRACHE");
 		language.vokabeln.push("POPULATIONSDATEN","ABSORPTION","HALBWERTSZEIT","VOLUMEN","CLEARANCE","ELIKONSTANTE");
@@ -55,41 +60,45 @@
 
 		language.translateAll();
 		
-		document.getElementById("sprache").addEventListener("change", function(event)
+		language.select.addEventListener("change", function(event)
 		{
-			this.visualize();
+			this.visualize(event);
 		}
 		.bind(this), false);
 		
 		this.language = language;
 	};
 	
-	Kinetics.prototype.visualize = function(event) {
-		
-		param = new Kinetic();
-	
-		if(!event)
+	Kinetics.prototype.visualize = function(event) 
+	{	
+		if(event)
 		{				
-			if( window.location.hash.length > 0) 
-			{
-				window.location.hash.replace("#","").split("&").forEach(zuweisen);
-			}
-	
-			param.toInput();	
+			this.kinetic.fromInput();					
+			
+			window.location.hash = this.kinetic.toHash();
 		}
 		else
 		{	
-			param.fromInput();					
-	
-	    	window.location.hash = param.toHash();
+			if( window.location.hash.length > 0) 
+			{
+				window.location.hash.replace("#","").split("&").forEach( function(element, index)
+				{			
+					if( element.split("=")[0] in this.kinetic){
+						this.kinetic[ element.split("=")[0] ] = parseFloat( element.split("=")[1] );
+					}
+			
+				}.bind(this));
+			}
+			
+			this.kinetic.toInput();	
 		}
-	
+		
 		// Berechnete Werte von Eingabe
-		var dosis = param.dosierung * param.bio / 100;  
-	 	var ka  = ( param.tin > 0 ) ? Math.log(2) / param.tin : 0;  
-	 	var cl  = ( param.hwz > 0 && param.v > 0) ? Math.log(2) * param.v / param.hwz : 0;
-	 	var ke  = ( param.hwz > 0) ? Math.log(2) / param.hwz : 0;
-	 	var c0 = dosis / param.v;
+		var dosis = this.kinetic.dosierung * this.kinetic.bio / 100;  
+	 	var ka  = ( this.kinetic.tin > 0 ) ? Math.log(2) / this.kinetic.tin : 0;  
+	 	var cl  = ( this.kinetic.hwz > 0 && this.kinetic.v > 0) ? Math.log(2) * this.kinetic.v / this.kinetic.hwz : 0;
+	 	var ke  = ( this.kinetic.hwz > 0) ? Math.log(2) / this.kinetic.hwz : 0;
+	 	var c0 = dosis / this.kinetic.v;
 	 	var ccssmin1a = 0;
 	 	var ccssmin1b = 0;
 	 	var cv1a = 0;
@@ -103,7 +112,7 @@
 	 	getElement( "clo" ).value = cl.toFixed(3);    	
 	 	getElement( "keo" ).value = ke.toFixed(4);
 	
-	 	if(param.hwz == 0 || param.v == 0){
+	 	if(this.kinetic.hwz == 0 || this.kinetic.v == 0){
 	 		this.graph.board(100, 100);	
 	 		
 		    	var abszisse = this.language.translate("ABSZISSE");
@@ -116,9 +125,9 @@
 	
 			// Concentration Max
 			// Standard
-	 	var cmax = ( c0 / param.getAccu(ke, param.tau) ) + param.cssmin;
+	 	var cmax = ( c0 / this.kinetic.getAccu(ke, this.kinetic.tau) ) + this.kinetic.cssmin;
 	
-		if(param.c1 > 0 || param.t1 > 0)
+		if(this.kinetic.c1 > 0 || this.kinetic.t1 > 0)
 		{
 			getElement("co1").style.opacity = "1";     			
 		}else
@@ -126,7 +135,7 @@
 			getElement("co1").style.opacity = "0.6";     			     						     			 			     			
 		}
 			
-		if((param.c1 > 0 && param.t1 > 0 ) && (param.c2 > 0 || param.t2 > 0))
+		if((this.kinetic.c1 > 0 && this.kinetic.t1 > 0 ) && (this.kinetic.c2 > 0 || this.kinetic.t2 > 0))
 		{
 	 		getElement("co2").style.opacity = "1";     			
 		}else
@@ -144,12 +153,12 @@
 		// Reset
 		this.language.translate("RECHENART","RECHENART");
 		// Range Volumen und Eliminiation variiert
-		if(param.c1 > 0 && param.t1 > 0 && param.c2 == 0 && param.t2 == 0)
+		if(this.kinetic.c1 > 0 && this.kinetic.t1 > 0 && this.kinetic.c2 == 0 && this.kinetic.t2 == 0)
 		{     			
 			// Volumen a)
-			cv1a = param.getVolume( dosis, param.tau, param.c1, param.t1, ke, ka);
+			cv1a = this.kinetic.getVolume( dosis, this.kinetic.tau, this.kinetic.c1, this.kinetic.t1, ke, ka);
 			cke1a = ke;
-			ccssmin1a = param.getConcentration( dosis, param.tau, cv1a, 0, ke, ka); 
+			ccssmin1a = this.kinetic.getConcentration( dosis, this.kinetic.tau, cv1a, 0, ke, ka); 
 	 		
 	 		// Max
 		    cmax = Math.max( cmax, ( (dosis / cv1a) + ccssmin1a) );
@@ -157,13 +166,13 @@
 	 		getElement("hwz1").value = (Math.log(2) / ke ).toFixed(1);
 	
 		    // Elimination b)
-		    var ccssmax1b = param.getConcentration( dosis, param.tau, param.v, param.t1, ke, ka);
-			cke1b = param.getElimination(ke, c0, param.c1, ccssmax1b );
-	 		cv1b = param.getVolume( dosis, param.tau, param.c1, param.t1, cke1b, ka);
-	 		ccssmin1b = param.getConcentration( dosis, param.tau, cv1b, 0, cke1b, ka); 
+		    var ccssmax1b = this.kinetic.getConcentration( dosis, this.kinetic.tau, this.kinetic.v, this.kinetic.t1, ke, ka);
+			cke1b = this.kinetic.getElimination(ke, c0, this.kinetic.c1, ccssmax1b );
+	 		cv1b = this.kinetic.getVolume( dosis, this.kinetic.tau, this.kinetic.c1, this.kinetic.t1, cke1b, ka);
+	 		ccssmin1b = this.kinetic.getConcentration( dosis, this.kinetic.tau, cv1b, 0, cke1b, ka); 
 	 		
 	 		// Max
-		    cmax = Math.max( cmax, ( (dosis / cv1b) + ccssmin1b), param.c1, ccssmax1b );
+		    cmax = Math.max( cmax, ( (dosis / cv1b) + ccssmin1b), this.kinetic.c1, ccssmax1b );
 	 		getElement("cv2").value = cv1b.toFixed(2);
 	 		getElement("hwz2").value = (Math.log(2) / cke1b).toFixed(1);
 	
@@ -174,12 +183,12 @@
 		}
 			
 			// Volumen und Elimination genau
-		if(param.c1 > 0 && param.t1 > 0 && param.c2 > 0 && param.t2 > 0){
-				cke2 = ( Math.log(param.c1) - Math.log(param.c2) ) / ( param.t2 % param.tau - param.t1 % param.tau );
-				cv2 = param.getVolume( dosis, param.tau, param.c1, param.t1, cke2, ka);
-				ccssmin2 = param.getConcentration( dosis, param.tau, cv2, 0, cke2, ka); 
+		if(this.kinetic.c1 > 0 && this.kinetic.t1 > 0 && this.kinetic.c2 > 0 && this.kinetic.t2 > 0){
+				cke2 = ( Math.log(this.kinetic.c1) - Math.log(this.kinetic.c2) ) / ( this.kinetic.t2 % this.kinetic.tau - this.kinetic.t1 % this.kinetic.tau );
+				cv2 = this.kinetic.getVolume( dosis, this.kinetic.tau, this.kinetic.c1, this.kinetic.t1, cke2, ka);
+				ccssmin2 = this.kinetic.getConcentration( dosis, this.kinetic.tau, cv2, 0, cke2, ka); 
 	 		// Max
-		    cmax = Math.max( cmax, ( (dosis / cv2) + ccssmin2), param.c2 );
+		    cmax = Math.max( cmax, ( (dosis / cv2) + ccssmin2), this.kinetic.c2 );
 	 		getElement("cv1").value = cv2.toFixed(2);
 	 		getElement("hwz1").value = (Math.log(2) / cke2 ).toFixed(1);
 	 		getElement("cv2").value = 0;
@@ -195,7 +204,7 @@
 		cmax = Math.max( cmax, getValue("otbi")*1.25, getValue("utbi")*1.25 );
 	
 	 	// Time Max
-	 	var tmax = Math.max( param.hwz, param.tau) * 6;
+	 	var tmax = Math.max( this.kinetic.hwz, this.kinetic.tau) * 6;
 	 	
 	 	/////////////////////////
 	 	// Graph Build
@@ -209,39 +218,45 @@
 	    this.graph.limit( getValue("utbi"), "rgba(50  ,255,50,0.4)");
 	    this.graph.limit( getValue("otbi"), "rgba(255,50  ,50,0.4)");
 			
-	    this.graph.auc(param.cssmin, c0, param.tau, ke, ka, "rgba(255,255,255,0.6)","rgba(255,255,255,0.6)");	   		
+	    this.graph.auc(this.kinetic.cssmin, c0, this.kinetic.tau, ke, ka, "rgba(255,255,255,0.6)","rgba(255,255,255,0.6)");	   		
 			
 		// Berechnungen
-		if(param.c1 > 0 && param.t1 > 0  && param.c2 == 0 && param.t2 == 0)
+		if(this.kinetic.c1 > 0 && this.kinetic.t1 > 0  && this.kinetic.c2 == 0 && this.kinetic.t2 == 0)
 		{
-			this.graph.auc(ccssmin1a, dosis / cv1a, param.tau, cke1a, ka, "none"  , "rgba(0,150,200,0.6)"  );	   		    		     		
-			this.graph.auc(ccssmin1b, dosis / cv1b, param.tau, cke1b, ka, "none", "rgba(0,200,200,0.6)");	   		    		
+			this.graph.auc(ccssmin1a, dosis / cv1a, this.kinetic.tau, cke1a, ka, "none"  , "rgba(0,150,200,0.6)"  );	   		    		     		
+			this.graph.auc(ccssmin1b, dosis / cv1b, this.kinetic.tau, cke1b, ka, "none", "rgba(0,200,200,0.6)");	   		    		
 		}
 			
-		if(param.c1 > 0 && param.t1 > 0 && param.c2 > 0 && param.t2 > 0)
+		if(this.kinetic.c1 > 0 && this.kinetic.t1 > 0 && this.kinetic.c2 > 0 && this.kinetic.t2 > 0)
 		{
-			this.graph.auc(ccssmin2 , dosis / cv2,  param.tau, cke2 , ka, "none", "rgba(0,150,200,0.6)");	   		    		
+			this.graph.auc(ccssmin2 , dosis / cv2,  this.kinetic.tau, cke2 , ka, "none", "rgba(0,150,200,0.6)");	   		    		
 		}
 		    		
 		// Punkte
-		if(param.c1 > 0 && param.t1 > 0 && param.c2 == 0 && param.t2 == 0)
+		if(this.kinetic.c1 > 0 && this.kinetic.t1 > 0 && this.kinetic.c2 == 0 && this.kinetic.t2 == 0)
 		{
-			this.graph.point(param.c1, param.t1, "rgba(0,50,200,0.6)", 8);  	
+			this.graph.point(this.kinetic.c1, this.kinetic.t1, "rgba(0,50,200,0.6)", 8);  	
 		}
-		if(param.c1 > 0 && param.t1 > 0 && param.c2 > 0 && param.t2 > 0)
+		if(this.kinetic.c1 > 0 && this.kinetic.t1 > 0 && this.kinetic.c2 > 0 && this.kinetic.t2 > 0)
 		{
-			this.graph.point(param.c1, param.t1, "rgba(0,50,200,0.6)", 8);  	
-			this.graph.point(param.c2, param.t2, "rgba(0,100,200,0.6)", 8);  		
+			this.graph.point(this.kinetic.c1, this.kinetic.t1, "rgba(0,50,200,0.6)", 8);  	
+			this.graph.point(this.kinetic.c2, this.kinetic.t2, "rgba(0,100,200,0.6)", 8);  		
 		}
 		   		    		
 		this.graph.legende();
 	};
 
+	Form = function() {};
+	
+	Form.prototype.createForm = function()
+	{
+		 
+	};
 
 		// Konstruktor
 		Graph = function() {
 	
-			var dummy = document.getElementsByTagName("kinetics")[0];
+			var dummy = document.getElementsByTagName("graph")[0];
 			
 			if(!dummy) return;
 					
@@ -448,7 +463,7 @@
 				var c = dose(c0, intervall, ka, ke, t);
 
 				// Vorhandene Konzentration ohne Absorbtion
-				c += css * param.getFraction(ke, t, 0);
+				c += css * Kinetic.getFraction(ke, t, 0);
 				// Vorhandene Konzentration mit Absorbtion
 				//c += css * Kinetic.getFraction(ke, t, ka);
 
@@ -459,9 +474,9 @@
 
 
 			// Rekursive Function AUC
-	    	function dose(c0, intervall, ka, ke, t) {
-
-	    		var c = c0 * param.getFraction(ke,t,ka);
+	    	function dose(c0, intervall, ka, ke, t) 
+	    	{
+	    		var c = c0 * Kinetic.getFraction(ke,t,ka);
 
 	    		if(t >= intervall){ 
 	    			c += dose(c0, intervall, ka, ke, t-intervall); 
@@ -469,6 +484,7 @@
 
 	    		return c;
 	    	}
+	    	
     	    if(fill != "none"){
     	    	conc.setAttribute("d", verlauf + " L"+this.x(zeit -1)+" "+this.y(0)+" Z");     	    	
     	    }else{
@@ -518,103 +534,102 @@
 			this.otb = 0;
 			this.utb = 0;
 		};
+		
 	    	
-	    	Kinetic.prototype.getFraction = function(ke, t, ka){
-	    		
-	    		if(!ka || ka == 0){
-	    			 return Math.exp( -ke*t);
-	    		}else{
-	    			return (ka / (ka -ke)) * ( Math.exp( -ke*t) - Math.exp( -ka*t) );	    			
-	    		}
-	    		
-	    	};
-	    	
-	    	Kinetic.prototype.getAccu = function(ke, t, ka){
-	    		return (1 - this.getFraction(ke, t, ka) );
-	    	};
-	    	
-	    	Kinetic.prototype.getVolume = function(dosis, tau, c, t, ke, ka){  		
-	    		return this.getConcentration(dosis, tau, c, t, ke, ka);
-	    	};
-	    	
-	    	Kinetic.prototype.getConcentration = function(dosis, tau, v, t, ke, ka){
-	
-	    		if(!ka || ka == 0){
-	    			//////////////////////////////////////// 
-	    			//  dosis		  1
-	    			// ------ * --------------- * e*-ke*t = c
-	    			//    v     ( 1 - e*-k*tau)
-	    			////////////////////////////////////////    	
-	    			var timepoint = ( t == 0) ? tau : t % tau;
-	
-	
-	    			return ( dosis / v ) * (1 / this.getAccu(ke, tau) ) * this.getFraction(ke, timepoint);    				
-	    			
-	    		}else{
-	    			//////////////////////////////////////////////////////////////////// 
-	    			//  dosis		ka		  (    e*-ke*t			    e*-ka*t    )
-	    			// ------ * ----------- * (--------------  -   ----------------) = c
-	    			//    v     ( ka - ke )	  ( 1 - e*-ke*tau)		(1 - e*-ka*tau))
-	    			////////////////////////////////////////////////////////////////////   			    			
-	    			return ( dosis / v ) * (ka / (ka - ke)) * ( (this.getFraction(ke, t % tau) / this.getAccu(ke, tau) ) - (this.getFraction(ka, t % tau) / this.getAccu(ka, tau) ) ) ;	    			
-	    		}
-	    		
-	    	};
-	    	
-	    	Kinetic.prototype.getElimination = function(ke, c0, css1, css1o) { 		
-	    		//////////////////////////////////////// 
-	    		// ln( Cmax + Css1  / Css1  )
-	    		// -------------------------- * k = k'
-	    		// ln( Cmax + Css1o / Css1o )
-	    		//////////////////////////////////////
-	    		return ke  * Math.log( (c0 + css1) / css1 ) / Math.log( (c0 + css1o ) / css1o);
-	    	};
-	    	
-	    	Kinetic.prototype.toHash = function(){
-	    		
-	    		var hash = [];
-	    		
-	    		for(parameter in this){
-	    			
-	    			if(typeof(this[parameter]) == "number" && this[parameter] > 0){
-	    				hash.push(parameter +"="+this[parameter]);    				
-	    			}
-	    		}
-	    		return hash.join("&");
-	    	};
-	    	
-	    	Kinetic.prototype.toInput = function() {
-	    		
-	    		for(parameter in this){
-	    			
-	    			if(typeof(this[parameter]) == "number"){
-	
-	    				if(getElement(parameter+"i"))
-    					{
-	    					getElement(parameter+"i").value = this[parameter];    					
-    					}
-	    			}  			
-	    		}
-	    	};
-	    	
-	    	Kinetic.prototype.fromInput = function() {
-	    		
-	    		for(parameter in this){
-	    			
-	    			if(typeof(this[parameter]) == "number"){
-	    				this[parameter] = getValue(parameter+"i");
-	    			}  			
-	    		}
-	    		 
-	    	};
+    	Kinetic.getFraction = function(ke, t, ka){
+    		
+    		if(!ka || ka == 0){
+    			 return Math.exp( -ke*t);
+    		}else{
+    			return (ka / (ka -ke)) * ( Math.exp( -ke*t) - Math.exp( -ka*t) );	    			
+    		}
+    		
+    	};
+    	Kinetic.prototype.getFraction = function(ke, t, ka){
+    		return Kinetic.getFraction(ke, t, ka);
+    	};
+    	
+    	Kinetic.prototype.getAccu = function(ke, t, ka){
+    		return (1 - Kinetic.getFraction(ke, t, ka) ); 
+    	};
+    	
+    	Kinetic.prototype.getVolume = function(dosis, tau, c, t, ke, ka){  		
+    		return this.getConcentration(dosis, tau, c, t, ke, ka);
+    	};
+    	
+    	Kinetic.prototype.getConcentration = function(dosis, tau, v, t, ke, ka){
 
-  
-// Utility functions
-function zuweisen(e){
-	if( e.split("=")[0] in param){
-		param[ e.split("=")[0] ] = parseFloat( e.split("=")[1] );
-	}
-}
+    		if(!ka || ka == 0){
+    			//////////////////////////////////////// 
+    			//  dosis		  1
+    			// ------ * --------------- * e*-ke*t = c
+    			//    v     ( 1 - e*-k*tau)
+    			////////////////////////////////////////    	
+    			var timepoint = ( t == 0) ? tau : t % tau;
+
+
+    			return ( dosis / v ) * (1 / this.getAccu(ke, tau) ) * this.getFraction(ke, timepoint);    				
+    			
+    		}else{
+    			//////////////////////////////////////////////////////////////////// 
+    			//  dosis		ka		  (    e*-ke*t			    e*-ka*t    )
+    			// ------ * ----------- * (--------------  -   ----------------) = c
+    			//    v     ( ka - ke )	  ( 1 - e*-ke*tau)		(1 - e*-ka*tau))
+    			////////////////////////////////////////////////////////////////////   			    			
+    			return ( dosis / v ) * (ka / (ka - ke)) * ( (this.getFraction(ke, t % tau) / this.getAccu(ke, tau) ) - (this.getFraction(ka, t % tau) / this.getAccu(ka, tau) ) ) ;	    			
+    		}
+    		
+    	};
+    	
+    	Kinetic.prototype.getElimination = function(ke, c0, css1, css1o) { 		
+    		//////////////////////////////////////// 
+    		// ln( Cmax + Css1  / Css1  )
+    		// -------------------------- * k = k'
+    		// ln( Cmax + Css1o / Css1o )
+    		//////////////////////////////////////
+    		return ke  * Math.log( (c0 + css1) / css1 ) / Math.log( (c0 + css1o ) / css1o);
+    	};
+    	
+    	Kinetic.prototype.toHash = function(){
+    		
+    		var hash = [];
+    		
+    		for(parameter in this){
+    			
+    			if(typeof(this[parameter]) == "number" && this[parameter] > 0){
+    				hash.push(parameter +"="+this[parameter]);    				
+    			}
+    		}
+    		return hash.join("&");
+    	};
+    	
+    	Kinetic.prototype.toInput = function() {
+    		
+    		for(parameter in this){
+    			
+    			if(typeof(this[parameter]) == "number"){
+
+    				if(getElement(parameter+"i"))
+					{
+    					getElement(parameter+"i").value = this[parameter];    					
+					}
+    			}  			
+    		}
+    	};
+    	
+    	Kinetic.prototype.fromInput = function() {
+    		
+    		for(parameter in this){
+    			
+    			if(typeof(this[parameter]) == "number"){
+    				this[parameter] = getValue(parameter+"i");
+    			}  			
+    		}
+    		 
+    	};
+
+
+
 
 function getElement(id) {
 	return document.getElementById(id);
