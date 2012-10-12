@@ -44,8 +44,8 @@ Language.data.en = {
 	RECHENART_PRECISE_INFO : "Exact calculation of volume of distribution and half-life",
 	
 	BEREICH:"<b>Therapeutic range</b>",
-	BEREICH_INFO:"Bange of concentration according to lab",
-	OBERE_GRENZE: "Upper Limi",
+	BEREICH_INFO:"Range of concentration according to lab",
+	OBERE_GRENZE: "Upper Limit",
 	OBERE_GRENZE_INFO: "Upper Limit of trough or peak concentration",
 	UNTERE_GRENZE: "Lower Limit",
 	UNTERE_GRENZE_INFO: "Lower Limit of trough concentration",

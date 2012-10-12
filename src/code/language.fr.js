@@ -6,7 +6,7 @@ Language.data.fr = {
 	F_INFO: "biodisponibilité",
 	DOSIS: "D <i>en mg</i>",
 	DOSIS_INFO: "dose administrée",
-	INTERVALL: "<span style=\"font-size:1.5em\">&#964;</span> <i>in h</i>",
+	INTERVALL: "<span style=\"font-size:1.5em\">&#964;</span> <i>en h</i>",
 	INTERVALL_INFO: "Intervalle entre les doses",
 	PREDOSE: "C<sub>min</sub> <i>en mg/L</i>",
 	PREDOSE_INFO: "concentration stable obtenue au premier dosage",
@@ -23,7 +23,7 @@ Language.data.fr = {
 	VOLUMEN_INFO: "volume de distribution",
 	CLEARANCE: "Cl <i>en L/h</i>",
 	CLEARANCE_INFO: "clairance calculée",
-	ELIKONSTANTE: "k<sub>e</sub> <i>in <sup>-h</sup></i>",
+	ELIKONSTANTE: "k<sub>e</sub> <i>en <sup>-h</sup></i>",
 	ELIKONSTANTE_INFO: "d'élimination calculée constante",
 	
 	PERSONALISIERUNG:"<b>personnalisation</b>",
