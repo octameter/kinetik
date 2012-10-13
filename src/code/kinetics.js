@@ -379,7 +379,7 @@
 					legend.setAttribute("visibility", "visible");
 					legend.setAttribute("x", x - 60);
 					legend.setAttribute("y", y - 25);
-					legend.textContent = "C("+json.t.toFixed(0)+")= "+json.c.toFixed(0)+"mg/L";
+					legend.textContent = "C("+json.t.toFixed(0)+") "+json.c.toFixed(0)+"mg/L";
 				}else{
 					box.setAttribute("visibility", "hidden");
 					legend.setAttribute("visibility", "hidden");
@@ -450,7 +450,8 @@
     	     // Y Tick Multiple
     	     var yStep = this.contentHeight / 10;
      
-     	     for(var yMark = 0; yMark < this.contentHeight; yMark += yStep){
+     	     for(var yMark = 0; yMark < this.contentHeight; yMark += yStep)
+     	     {
      	    	 ctx.moveTo( this.x0 - 10, this.y0 - yMark);
      	    	 ctx.lineTo( this.x0, this.y0 - yMark);
      	     	 ctx.font = (fontSize*2/3)+"px sans-serif";
