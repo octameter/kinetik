@@ -29,6 +29,8 @@ Phone: +41 (0)44 255 20 68
 <br/>Email: medi.info@usz.ch
 
 ###Translation
+Alessandro Ceschi (it)
+<br>/Email: alessandro.ceschi@usz.ch
 Robin Herve (fr)
 <br/>Email: robin.herve@gmail.com
 
