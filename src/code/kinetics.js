@@ -524,16 +524,14 @@
     	Graph.prototype.point = function(c, t, stroke, radius){
     		
     		var svg = document.getElementById("spiegel");
-    		
-     		var punkt = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-     		punkt.id = "punkt";
-     		punkt.setAttribute("cx", this.x( t ) );
-     		punkt.setAttribute("cy", this.y( c ) );
-     		punkt.setAttribute("r", radius);
-     		
-     		punkt.setAttribute("fill", stroke);
-     	 	
-     		punkt.setAttributeNS("http://epha.ch/pharmacovigilance", "data", "{\"c\":"+c+",\"t\":"+t+"}" );
+    		  		
+	     		var punkt = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	     		punkt.id = "punkt";
+	     		punkt.setAttribute("cx", this.x( t ) );
+	     		punkt.setAttribute("cy", this.y( c ) );
+	     		punkt.setAttribute("r", radius);   		
+	     		punkt.setAttribute("fill", stroke);
+	     		punkt.setAttributeNS("http://epha.ch/pharmacovigilance", "data", "{\"c\":"+c+",\"t\":"+t+"}" );
 
      		svg.appendChild(punkt); 		
     	};
