@@ -34,7 +34,7 @@
 	};
 	
 
-	Kinetics.prototype.registerListener = function() {
+	Kinetics.prototype.registerListener = function(event) {
 		
 		var inputs = document.getElementsByTagName("input");
 		
@@ -51,7 +51,7 @@
 		
 		language.createSelect();	
 		
-		language.getPreference("de");
+		language.getPreference("en");
 		
 		language.vokabeln.push("DOSIERUNG","F","DOSIS","INTERVALL","PREDOSE","SPRACHE");
 		language.vokabeln.push("POPULATIONSDATEN","ABSORPTION","HALBWERTSZEIT","VOLUMEN","CLEARANCE","ELIKONSTANTE");
@@ -71,20 +71,38 @@
 	
 	Kinetics.prototype.visualize = function(event) 
 	{	
+
 		if(event)
 		{				
 			this.kinetic.fromInput();					
 			
 			window.location.hash = this.kinetic.toHash();
+			
+			if(event.target == this.language.select) 
+			{
+				var prefix = (window.location.hash.length > 0) ? "&" : "#";
+				window.location.hash += prefix + "lang="+this.language.sprache;
+			}
 		}
 		else
 		{	
+			// START WINDOW 
 			if( window.location.hash.length > 0) 
 			{
+
 				window.location.hash.replace("#","").split("&").forEach( function(element, index)
 				{			
-					if( element.split("=")[0] in this.kinetic){
+					if( element.split("=")[0] in this.kinetic)
+					{
 						this.kinetic[ element.split("=")[0] ] = parseFloat( element.split("=")[1] );
+					}
+					
+					
+					if( element.split("=")[0] == "lang")
+					{
+						this.language.sprache = element.split("=")[1];
+						this.language.setOption();
+						this.language.setLanguage();
 					}
 			
 				}.bind(this));

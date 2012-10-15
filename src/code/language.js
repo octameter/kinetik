@@ -33,8 +33,7 @@
 		else
 		{
 			this.select = document.getElementById("sprache");		
-		}
-		
+		}		
 
 		this.select.addEventListener("change", function(event)
 		{
@@ -45,6 +44,8 @@
 	
 	Language.prototype.setOption = function()
 	{
+		if(!this.select) return;
+		
 		for(var i = 0; i < this.select.options.length; i++)
 		{
 			if(this.sprache == this.select.options[i].value)
@@ -95,6 +96,7 @@
     	}
     	else
     	{
+    		this.getPreference("en");
     		alert("Language has not been translated, yet!\n\n**Want to contribute\n**Email: support@epha.ch");
     	}
 
