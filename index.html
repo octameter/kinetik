@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<!-- DEFAULT LANGUAGE SETTING -->
+<html lang="de">
+  <head>
+  
+    <title>Pharmacokinetics</title>
+    
+    <meta charset="utf-8" />
+    <meta name="author" content="Marco Egbring" />
+    
+    <link  type="text/css" href="style/kinetics.css" rel="stylesheet" />
+    <style type="text/css">
+    
+    </style>
+   
+   </head>
+   <body>
+
+   		<div style="width:900px; height:900px; margin:auto;">
+   		
+		  	<form>
+
+		  		<fieldset>
+		  			<legend id="DOSIERUNG"></legend>
+					<input type="number" id="bioi" name="bioi" min="1" max="100" value="100"  step="1" />		
+					<label id="F" for="bioi"></label>
+	  				<hr/>
+					<input type="number" id="dosierungi" name="dosisi" min="0" max="10000"  step="100"/>		
+					<label id="DOSIS" for="dosierungi"></label>
+	  				<hr/>
+					<input type="number" id="taui" name="taui" min="0" max="1000"  />		
+					<label id="INTERVALL" for="taui"></label>
+	  				<hr/>	
+					<input type="number" id="cssmini" name="cssi" min="0" max="1000"  />	
+					<label id="PREDOSE" for="cssmini"></label>			
+			   		<hr/>
+			   		<select id="sprache" >
+			   			<option value="de" selected>DE</option>
+			   			<option value="fr" >FR</option>
+			   			<option value="it" >IT</option>
+			   			<option value="en" >EN</option>
+			   			<option value="cn" >CN</option>
+			   		</select>	
+					<label id="SPRACHE" for="sprache"></label>			
+				</fieldset>
+
+		  		<fieldset>
+		  			<legend id="POPULATIONSDATEN"></legend>
+
+					<input type="number" id="tini" min="0" max="10"  step="0.1" value="0"  />
+					<label id="ABSORPTION" for="tini"></label>
+	  				<hr/>
+					<input type="number" id="hwzi" min="0" max="100" value="12.0" step="1" />
+					<label id="HALBWERTSZEIT" for="hwzi"></label>
+	  				<hr/>
+					<input type="number" id="vi" min="0" max="100" step="1" />
+					<label id="VOLUMEN" for="vi"></label>
+	  				<hr/>
+					<input type="number" id="clo" min="0.1" max="100"  step="1"  disabled/>
+					<label id="CLEARANCE" for="clo" ></label>
+	  				<hr/>
+					<input type="number" id="keo" min="0.001" max="1"  step="0.1" disabled/>
+					<label id="ELIKONSTANTE" for="keo" ></label>
+				</fieldset>
+
+		  		<fieldset id="personalisierung" >
+		  			<legend id="PERSONALISIERUNG"></legend>
+
+			  			<p id="co1" style="padding:0px;margin:0px;background-color:rgba(0,50,200, 0.6);opacity:0.6">
+							<input type="number" id="c1i" min="1" max="1000" value="0" style="width:55px" />
+							<label id="KONZENTRATION1" for="c1i" ></label>
+							<input type="number" id="t1i" min="1" max="1000" value="0" style="width:55px"/>
+							<label id ="ZEIT1" for="t1i" ></label>
+						</p>
+	  				<hr/>
+			  			<p id="co2" style="padding:0px;margin:0px;background-color:rgba(0,100,200, 0.6);opacity:0.6">
+							<input type="number" id="c2i" min="1" max="1000"  value="0" style="width:55px"/>
+							<label id="KONZENTRATION2" for="c2i" ></label>
+							<input type="number" id="t2i" min="1" max="1000" value="0" style="width:55px" />
+							<label id="ZEIT2" for="t2i" ></label>	
+						</p>
+					<hr/>
+						<label id="RECHENART"></label>	
+					<hr/>
+			  			<p id="co3" style="padding:0px;margin:0px;background-color:rgba(0,150,200, 0.6);opacity:0.6">
+							<input type="number" id="cv1" style="width:60px;" disabled/>
+							<label for="cv1">V</label>	
+							<input type="number" id="hwz1" style="width:60px;" disabled/>
+							<label for="hwz1">t<sub>1\2</sub></label>	
+						</p>
+					<hr/>
+			  			<p id="co4" style="padding:0px;margin:0px;background-color:rgba(0,200,200, 0.6);opacity:0.6">
+							<input type="number" id="cv2" style="width:60px;" disabled/>
+							<label for="cv2">V</label>	
+							<input type="number" id="hwz2" style="width:60px;" disabled/>
+							<label for="hwz2">t<sub>1\2</sub></label>	
+						</p>
+				</fieldset>
+
+				<fieldset>
+		  			<legend id="BEREICH"></legend>
+
+		  			<p style="padding:0px;margin:0px;background-color:rgba(255,50,50,0.4);">
+						<input type="number" id="otbi" min="1" max="10000" value="0" style="width:60px;"  />
+						<label id="OBERE_GRENZE" for="otbi" ></label>
+					</p>
+					<hr/>
+		  			<p style="padding:0px;margin:0px;background-color:rgba(50,255,50,0.4);">
+						<input type="number" id="utbi" min="1" max="10000" value="0" style="width:60px;"   />
+						<label id="UNTERE_GRENZE" for="utbi" ></label>	
+				</fieldset>
+
+			</form>
+
+	  		<graph width="900" height="600" padding="60" ></graph>
+
+   		</div>	
+
+   </body>
+   	<!-- LANGUAGE FILE EINBINDEN -->
+    <script type="text/javascript" src="code/language.js"></script>     
+    <script type="text/javascript" src="code/language.cn.js"></script>     
+    <script type="text/javascript" src="code/language.de.js"></script>     
+    <script type="text/javascript" src="code/language.en.js"></script>     
+    <script type="text/javascript" src="code/language.fr.js"></script>        
+    <script type="text/javascript" src="code/language.it.js"></script>        
+
+	<!-- PHARMACOKINETIC -->
+    <script type="text/javascript" src="code/kinetics.js"></script>     
+    
+    <script type="text/javascript"><!--
+    
+	    window.onload = function() 
+	    {
+    		// Initialize Default
+			var kinetics = new Kinetics();
+    		kinetics.start(); 		
+	    }
+
+
+    </script>
+  	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-9955206-2']);
+		_gaq.push(['_setDomainName', 'kinetics.epha.ch']);
+		_gaq.push(['_trackPageview']);
+	
+		(function() {
+		  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+</html>
