@@ -9,15 +9,17 @@
     <meta charset="utf-8" />
     <meta name="author" content="Marco Egbring" />
     
+    <link  type="text/css" href="style/colors.css" rel="stylesheet" />
     <link  type="text/css" href="style/kinetics.css" rel="stylesheet" />
-    <style type="text/css">
-    
-    </style>
    
    </head>
-   <body>
+   
 
-   		<div style="width:900px; height:900px; margin:auto;">
+   <body id="app" class="color3">
+
+	   <header id="xauth"></header>
+        
+   		<div style="width:900px; height:860px; margin:auto;">
    		
 		  	<form>
 
@@ -45,7 +47,7 @@
 					<label id="SPRACHE" for="sprache"></label>			
 				</fieldset>
 
-		  		<fieldset>
+		  		<fieldset >
 		  			<legend id="POPULATIONSDATEN"></legend>
 
 					<input type="number" id="tini" min="0" max="10"  step="0.1" value="0"  />
@@ -98,7 +100,7 @@
 						</p>
 				</fieldset>
 
-				<fieldset>
+				<fieldset >
 		  			<legend id="BEREICH"></legend>
 
 		  			<p style="padding:0px;margin:0px;background-color:rgba(255,50,50,0.4);">
@@ -113,43 +115,97 @@
 
 			</form>
 
-	  		<graph width="900" height="600" padding="60" ></graph>
+	  		<graph width="900" height="540" padding="50" ></graph>
 
    		</div>	
-
-   </body>
-   	<!-- LANGUAGE FILE EINBINDEN -->
-    <script type="text/javascript" src="code/language.js"></script>     
-    <script type="text/javascript" src="code/language.cn.js"></script>     
-    <script type="text/javascript" src="code/language.de.js"></script>     
-    <script type="text/javascript" src="code/language.en.js"></script>     
-    <script type="text/javascript" src="code/language.fr.js"></script>        
-    <script type="text/javascript" src="code/language.it.js"></script>        
-
-	<!-- PHARMACOKINETIC -->
-    <script type="text/javascript" src="code/kinetics.js"></script>     
-    
-    <script type="text/javascript"><!--
-    
-	    window.onload = function() 
-	    {
-    		// Initialize Default
-			var kinetics = new Kinetics();
-    		kinetics.start(); 		
-	    }
-
-
-    </script>
-  	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-9955206-2']);
-		_gaq.push(['_setDomainName', 'kinetics.epha.ch']);
-		_gaq.push(['_trackPageview']);
+   		
+	   	<!-- LANGUAGE FILE EINBINDEN -->
+	    <script type="text/javascript" src="code/language.js"></script>     
+	    <script type="text/javascript" src="code/language.cn.js"></script>     
+	    <script type="text/javascript" src="code/language.de.js"></script>     
+	    <script type="text/javascript" src="code/language.en.js"></script>     
+	    <script type="text/javascript" src="code/language.fr.js"></script>        
+	    <script type="text/javascript" src="code/language.it.js"></script>        
 	
-		(function() {
-		  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
+		<!-- PHARMACOKINETIC -->
+	    <script type="text/javascript" src="code/kinetics.js"></script>     
+	    
+	   	<script src="code/library.0.1.2.js"></script>
+	   	<script src="code/model.js"></script>
+	   	<script src="code/commands.js"></script>
+	    <script>
+	        
+	        var app = {
+	
+					addCommands: function()
+					{
+						addCommand( Events.START, startCommand ); 
+						addCommand( Events.REQUEST, requestCommand ); 
+						addCommand( Events.RESPONSE, responseCommand ); 
+	                },
+	                bind: function() 
+					{
+						DOM( window  ).onDOM( Events.START );
+	                    DOM( window  ).onMSG( Events.RESPONSE, {} );
+	                },
+					initialize:function() 
+					{
+							if( document.domain == "10.129.144.18" || document.domain == "localhost" ) 
+	   						{
+	   							var domain = document.domain;
+	   							
+	   							var device_browser = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
+	   								
+	   							// BROWSER
+	   							if( !device_browser )
+	   							{
+		   							document.domain = domain;
+		   							this.konto = "http://"+domain+":8888/konto";	
+		   	   						this.client = "DESKTOP";
+	   							}
+	   							// DEVICE 
+	   							// 
+	   							else
+	   							{
+		   							this.client = "DEVICE";	
+	   							}
+	
+	   							this.node = new Node( "http://"+domain+":8080" );
+	   							this.live = false;
+	   	   						this.debug = true;
+	   						}
+							
+	                    	if( document.domain == "kinetics.epha.ch" )
+	   						{
+	   							document.domain = "epha.ch";
+	   							
+	   	   						this.node = new Node( "https://node.epha.ch" ); 
+	   	   						this.konto = "http://konto.epha.ch";		
+	   	   						this.live = true;
+	   	   						this.client = "DESKTOP";
+	   	   						this.debug = true;
+	   						}
+						
+						this.addCommands();	
+						this.bind();		
+	  					this.context = "Kinetics ->";
+					}         
+				};
+	
+				app.initialize(); 
+	
+	    </script>
+		  		    <script>
+			        var _gaq = _gaq || [];
+			        _gaq.push(['_setAccount', 'UA-9955206-2']);
+			        _gaq.push(['_setDomainName', 'epha.ch']);
+			        _gaq.push(['_trackPageview']);
+			
+			       (function() {
+			         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			       })();
+		     </script>
+	   </body>
 </html>
