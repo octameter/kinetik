@@ -4,7 +4,7 @@
 <html lang="de">
   <head>
   
-    <title>Pharmacokinetics</title>
+    <title>Kinetik</title>
     
     <meta charset="utf-8" />
     <meta name="author" content="Marco Egbring" />
@@ -175,7 +175,7 @@
 	   	   						this.debug = true;
 	   						}
 							
-	                    	if( document.domain == "kinetics.epha.ch" )
+	                    	if( document.domain == "kinetik.epha.ch" )
 	   						{
 	   							document.domain = "epha.ch";
 	   							
@@ -188,17 +188,34 @@
 						
 						this.addCommands();	
 						this.bind();		
-	  					this.context = "Kinetics ->";
+	  					this.context = "Kinetik ->";
 					}         
 				};
 	
-				app.initialize(); 
+	        	
+	        	var agent = new Agent();
+	        	
+	        	if(
+	        		(agent.browser == "Internet Explorer" && this.agent.version >= 9) ||
+					(agent.browser == "Chrome" && this.agent.version  > 22) ||
+					(agent.browser == "Firefox" && this.agent.version  > 18) ||
+					(agent.browser == "Opera" && this.agent.version  > 8) ||
+					(agent.browser == "Safari" && this.agent.version  > 5)
+				  )
+	        	{
+					app.initialize(); 
+	        	}
+	        	else
+	        	{
+	        		window.location = "error.html#oldbrowser";
+	        	}
+	        
 	
 	    </script>
 		  		    <script>
 			        var _gaq = _gaq || [];
 			        _gaq.push(['_setAccount', 'UA-9955206-2']);
-			        _gaq.push(['_setDomainName', 'epha.ch']);
+			        _gaq.push(['_setDomainName', 'kinetik.epha.ch']);
 			        _gaq.push(['_trackPageview']);
 			
 			       (function() {

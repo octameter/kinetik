@@ -1,4 +1,5 @@
-html,body{font-family:VERDANA;}
+html,body{width:100%;height:100%;margin:0;padding:0;overflow:hidden;font-family:VERDANA;}
+header,iframe{position:fixed;top:0px;width:100%;height:42px;border:none;background:#4c6173;}
 .color1{background:#1c2f40;}
 .color2{background:#4c6173;}
 .color3{background:#8094a6;}
