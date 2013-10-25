@@ -1,7 +1,6 @@
    
 	body {
 		position:relative;
- 		top:42px;
 		overflow-y: auto;
 		overflow-x: hidden;
 	}
@@ -24,8 +23,8 @@
  		display:inline-block;
 		/*	height:75%; */
  		width:190px;
-        float:left;
-        border-radius: 6px;
+    float:left;
+    border-radius: 6px;
  	} 		
  	
  	fieldset > legend {
