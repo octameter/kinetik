@@ -1,6 +1,13 @@
 <!DOCTYPE html>
-
-<!-- DEFAULT LANGUAGE SETTING -->
+<!-- 
+ _    _            _   _ _    
+| |  (_)          | | (_) |   
+| | ___ _ __   ___| |_ _| | __
+| |/ / | '_ \ / _ \ __| | |/ /
+|   <| | | | |  __/ |_| |   < 
+|_|\_\_|_| |_|\___|\__|_|_|\_\
+                              
+ -->
 <html lang="de">
   <head>
   
@@ -16,10 +23,8 @@
    
 
    <body id="app" class="color3">
-
-	   <header id="xauth"></header>
         
-   		<div style="width:900px; height:860px; margin:auto;">
+   		<article style="width:900px; height:860px; margin:auto;">
    		
 		  	<form>
 
@@ -117,7 +122,7 @@
 
 	  		<graph width="900" height="540" padding="50" ></graph>
 
-   		</div>	
+   		</article>	
    		
 	   	<!-- LANGUAGE FILE EINBINDEN -->
 	    <script type="text/javascript" src="code/language.js"></script>     
@@ -127,102 +132,21 @@
 	    <script type="text/javascript" src="code/language.fr.js"></script>        
 	    <script type="text/javascript" src="code/language.it.js"></script>        
 	
-		<!-- PHARMACOKINETIC -->
+		  <!-- PHARMACOKINETIC -->
 	    <script type="text/javascript" src="code/kinetics.js"></script>     
 	    
-	   	<script src="code/library.0.1.2.js"></script>
+	   	<script src="code/library.0.1.3.js"></script>
 	   	<script src="code/model.js"></script>
-	   	<script src="code/commands.js"></script>
+	   	<script src="code/index.js"></script>
 	    <script>
-	        
-	        var app = {
-	
-					addCommands: function()
-					{
-						addCommand( Events.START, startCommand ); 
-						addCommand( Events.REQUEST, requestCommand ); 
-						addCommand( Events.RESPONSE, responseCommand ); 
-	                },
-	                bind: function() 
-					{
-						DOM( window  ).onDOM( Events.START );
-	                    DOM( window  ).onMSG( Events.RESPONSE, {} );
-	                },
-					initialize:function() 
-					{
-							if( document.domain == "10.129.144.18" || document.domain == "localhost" ) 
-	   						{
-	   							var domain = document.domain;
-	   							
-	   							var device_browser = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
-	   								
-	   							// BROWSER
-	   							if( !device_browser )
-	   							{
-		   							document.domain = domain;
-		   							this.konto = "http://"+domain+":8888/konto";	
-		   	   						this.client = "DESKTOP";
-	   							}
-	   							// DEVICE 
-	   							// 
-	   							else
-	   							{
-		   							this.client = "DEVICE";	
-	   							}
-	
-	   							this.node = new Node( "http://"+domain+":8080" );
-	   							this.live = false;
-	   	   						this.debug = true;
-	   						}
-							
-	                    	if( document.domain == "kinetik.epha.ch" )
-	   						{
-	   							document.domain = "epha.ch";
-	   							
-	   	   						this.node = new Node( "https://node.epha.ch" ); 
-	   	   						this.konto = "http://konto.epha.ch";		
-	   	   						this.live = true;
-	   	   						this.client = "DESKTOP";
-	   	   						this.debug = true;
-	   						}
-						
-						this.addCommands();	
-						this.bind();		
-	  					this.context = "Kinetik ->";
-					}         
-				};
-	
-	        	
-	        	var agent = new Agent();
-	        	
-	        	if(
-	        		(agent.browser == "Internet Explorer" && this.agent.version >= 9) ||
-					(agent.browser == "Chrome" && this.agent.version  > 22) ||
-					(agent.browser == "Firefox" && this.agent.version  > 18) ||
-					(agent.browser == "Opera" && this.agent.version  > 8) ||
-					(agent.browser == "Safari" && this.agent.version  > 5)
-				  )
-	        	{
-					app.initialize(); 
-	        	}
-	        	else
-	        	{
-	        		window.location = "error.html#oldbrowser";
-	        	}
-	        
-	
-	    </script>
-		  		    <script>
-			        var _gaq = _gaq || [];
-			        _gaq.push(['_setAccount', 'UA-9955206-2']);
-			        _gaq.push(['_setDomainName', 'kinetik.epha.ch']);
-			        _gaq.push(['_trackPageview']);
-			
-			       (function() {
-			         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			       })();
-		     </script>
+	      if( "addEventListener" in window )
+	      {
+	        App.initialize("kinetik.epha.ch");                     
+	      }
+	      else
+	      {
+	        DOM( document.body ).error("oldbrowser");
+	      } 
+     </script>
 	   </body>
 </html>
