@@ -9,144 +9,194 @@
                               
  -->
 <html lang="de">
-  <head>
+<head>
+
+  <title>Kinetik</title>
   
-    <title>Kinetik</title>
-    
-    <meta charset="utf-8" />
-    <meta name="author" content="Marco Egbring" />
-    
-    <link  type="text/css" href="style/colors.css" rel="stylesheet" />
-    <link  type="text/css" href="style/kinetics.css" rel="stylesheet" />
-   
-   </head>
-   
+  <meta charset="utf-8" />
+  <meta name="author" content="Marco Egbring">
+  
+  <link href="style/theme.css" rel="stylesheet">
+  <link href="style/kinetics.css" rel="stylesheet">
+ 
+</head>
 
-   <body id="app" class="color3">
+<body id="app" class="color3">
+     
+    <!-- INTRO -->
+    <article id="introId" class="view color4">
+    
+      <div class="intro-wrapper">
+        <div class="color2">
         
-   		<article style="width:900px; height:860px; margin:auto;">
-   		
-		  	<form>
+            <div class="page">
+              <div class="intro-main row">    
+                <section class="cell">
+                  <h1 class="intro-title"></h1>
+                  <h2 class="intro-claim"></h2>
+                </section>       
+                <div class="cell">
+                  <fieldset>
+                    <legend>
+                      <strong>Start</strong>
+                    </legend>
+                    <p style="width:100%">
+                      <a class="button blue">Dosis berechnen</a>  
+                    </p>                
+                  </fieldset>
+                </div>      
+              </div>   
+          </div>
+          
+        </div>
+         
+        <div class="page">
+            <div class="intro-content">
+                <ul class="row intro-features"></ul>
+            </div>
+        </div>
+      
+      </div>
+      
+      <div class="intro-footer color5">
+      
+        <div class="page">
+          <div class="row">
+            <div class="cell intro-credits">
+            </div>
+            <div class="cell intro-contact">
+            </div>
+          </div>
+        </div>
+        
+        <hr>
+        
+        <div class="page intro-copyright"></div>
+        
+      </div>
+      
+  </article>
+     
+  <!-- GRAPH -->
+  <article id="graphId" class="view">
+  
+      <form>
 
-		  		<fieldset>
-		  			<legend id="DOSIERUNG"></legend>
-					<input type="number" id="bioi" name="bioi" min="1" max="100" value="100"  step="1" />		
-					<label id="F" for="bioi"></label>
-	  				<hr/>
-					<input type="number" id="dosierungi" name="dosisi" min="0" max="10000"  step="100"/>		
-					<label id="DOSIS" for="dosierungi"></label>
-	  				<hr/>
-					<input type="number" id="taui" name="taui" min="0" max="1000"  />		
-					<label id="INTERVALL" for="taui"></label>
-	  				<hr/>	
-					<input type="number" id="cssmini" name="cssi" min="0" max="1000"  />	
-					<label id="PREDOSE" for="cssmini"></label>			
-			   		<hr/>
-			   		<select id="sprache" >
-			   			<option value="de" selected>DE</option>
-			   			<option value="fr" >FR</option>
-			   			<option value="it" >IT</option>
-			   			<option value="en" >EN</option>
-			   			<option value="cn" >CN</option>
-			   		</select>	
-					<label id="SPRACHE" for="sprache"></label>			
-				</fieldset>
+          <fieldset>
+              <legend id="DOSIERUNG"></legend>
+              <input type="number" id="bioi" name="bioi" min="1" max="100" value="100"  step="1" />		
+              <label id="F" for="bioi"></label>
+              <hr/>
+              <input type="number" id="dosierungi" name="dosisi" min="0" max="10000"  step="100"/>		
+              <label id="DOSIS" for="dosierungi"></label>
+              <hr/>
+              <input type="number" id="taui" name="taui" min="0" max="1000"  />		
+              <label id="INTERVALL" for="taui"></label>
+              <hr/>	
+              <input type="number" id="cssmini" name="cssi" min="0" max="1000"  />	
+              <label id="PREDOSE" for="cssmini"></label>			
+              <hr/>
+              <select id="sprache" >
+                  <option value="de" selected>DE</option>
+                  <option value="fr" >FR</option>
+                  <option value="it" >IT</option>
+                  <option value="en" >EN</option>
+                  <option value="cn" >CN</option>
+              </select>	
+              <label id="SPRACHE" for="sprache"></label>			
+          </fieldset>
 
-		  		<fieldset >
-		  			<legend id="POPULATIONSDATEN"></legend>
+          <fieldset >
+              <legend id="POPULATIONSDATEN"></legend>
 
-					<input type="number" id="tini" min="0" max="10"  step="0.1" value="0"  />
-					<label id="ABSORPTION" for="tini"></label>
-	  				<hr/>
-					<input type="number" id="hwzi" min="0" max="100" value="12.0" step="1" />
-					<label id="HALBWERTSZEIT" for="hwzi"></label>
-	  				<hr/>
-					<input type="number" id="vi" min="0" max="100" step="1" />
-					<label id="VOLUMEN" for="vi"></label>
-	  				<hr/>
-					<input type="number" id="clo" min="0.1" max="100"  step="1"  disabled/>
-					<label id="CLEARANCE" for="clo" ></label>
-	  				<hr/>
-					<input type="number" id="keo" min="0.001" max="1"  step="0.1" disabled/>
-					<label id="ELIKONSTANTE" for="keo" ></label>
-				</fieldset>
+              <input type="number" id="tini" min="0" max="10"  step="0.1" value="0"  />
+              <label id="ABSORPTION" for="tini"></label>
+              <hr/>
+              <input type="number" id="hwzi" min="0" max="100" value="12.0" step="1" />
+              <label id="HALBWERTSZEIT" for="hwzi"></label>
+              <hr/>
+              <input type="number" id="vi" min="0" max="100" step="1" />
+              <label id="VOLUMEN" for="vi"></label>
+              <hr/>
+              <input type="number" id="clo" min="0.1" max="100"  step="1"  disabled/>
+              <label id="CLEARANCE" for="clo" ></label>
+              <hr/>
+              <input type="number" id="keo" min="0.001" max="1"  step="0.1" disabled/>
+              <label id="ELIKONSTANTE" for="keo" ></label>
+          </fieldset>
 
-		  		<fieldset id="personalisierung" >
-		  			<legend id="PERSONALISIERUNG"></legend>
+          <fieldset id="personalisierung" >
+              <legend id="PERSONALISIERUNG"></legend>
 
-			  			<p id="co1" style="padding:0px;margin:0px;background-color:rgba(0,50,200, 0.6);opacity:0.6">
-							<input type="number" id="c1i" min="1" max="1000" value="0" style="width:55px" />
-							<label id="KONZENTRATION1" for="c1i" ></label>
-							<input type="number" id="t1i" min="1" max="1000" value="0" style="width:55px"/>
-							<label id ="ZEIT1" for="t1i" ></label>
-						</p>
-	  				<hr/>
-			  			<p id="co2" style="padding:0px;margin:0px;background-color:rgba(0,100,200, 0.6);opacity:0.6">
-							<input type="number" id="c2i" min="1" max="1000"  value="0" style="width:55px"/>
-							<label id="KONZENTRATION2" for="c2i" ></label>
-							<input type="number" id="t2i" min="1" max="1000" value="0" style="width:55px" />
-							<label id="ZEIT2" for="t2i" ></label>	
-						</p>
-					<hr/>
-						<label id="RECHENART"></label>	
-					<hr/>
-			  			<p id="co3" style="padding:0px;margin:0px;background-color:rgba(0,150,200, 0.6);opacity:0.6">
-							<input type="number" id="cv1" style="width:60px;" disabled/>
-							<label for="cv1">V</label>	
-							<input type="number" id="hwz1" style="width:60px;" disabled/>
-							<label for="hwz1">t<sub>1\2</sub></label>	
-						</p>
-					<hr/>
-			  			<p id="co4" style="padding:0px;margin:0px;background-color:rgba(0,200,200, 0.6);opacity:0.6">
-							<input type="number" id="cv2" style="width:60px;" disabled/>
-							<label for="cv2">V</label>	
-							<input type="number" id="hwz2" style="width:60px;" disabled/>
-							<label for="hwz2">t<sub>1\2</sub></label>	
-						</p>
-				</fieldset>
+                  <p id="co1" style="padding:0px;margin:0px;background-color:rgba(0,50,200, 0.6);opacity:0.6">
+                      <input type="number" id="c1i" min="1" max="1000" value="0" style="width:55px" />
+                      <label id="KONZENTRATION1" for="c1i" ></label>
+                      <input type="number" id="t1i" min="1" max="1000" value="0" style="width:55px"/>
+                      <label id ="ZEIT1" for="t1i" ></label>
+                  </p>
+              <hr/>
+                  <p id="co2" style="padding:0px;margin:0px;background-color:rgba(0,100,200, 0.6);opacity:0.6">
+                      <input type="number" id="c2i" min="1" max="1000"  value="0" style="width:55px"/>
+                      <label id="KONZENTRATION2" for="c2i" ></label>
+                      <input type="number" id="t2i" min="1" max="1000" value="0" style="width:55px" />
+                      <label id="ZEIT2" for="t2i" ></label>	
+                  </p>
+              <hr/>
+                  <label id="RECHENART"></label>	
+              <hr/>
+                  <p id="co3" style="padding:0px;margin:0px;background-color:rgba(0,150,200, 0.6);opacity:0.6">
+                      <input type="number" id="cv1" style="width:60px;" disabled/>
+                      <label for="cv1">V</label>	
+                      <input type="number" id="hwz1" style="width:60px;" disabled/>
+                      <label for="hwz1">t<sub>1\2</sub></label>	
+                  </p>
+              <hr/>
+                  <p id="co4" style="padding:0px;margin:0px;background-color:rgba(0,200,200, 0.6);opacity:0.6">
+                      <input type="number" id="cv2" style="width:60px;" disabled/>
+                      <label for="cv2">V</label>	
+                      <input type="number" id="hwz2" style="width:60px;" disabled/>
+                      <label for="hwz2">t<sub>1\2</sub></label>	
+                  </p>
+          </fieldset>
 
-				<fieldset >
-		  			<legend id="BEREICH"></legend>
+          <fieldset >
+              <legend id="BEREICH"></legend>
 
-		  			<p style="padding:0px;margin:0px;background-color:rgba(255,50,50,0.4);">
-						<input type="number" id="otbi" min="1" max="10000" value="0" style="width:60px;"  />
-						<label id="OBERE_GRENZE" for="otbi" ></label>
-					</p>
-					<hr/>
-		  			<p style="padding:0px;margin:0px;background-color:rgba(50,255,50,0.4);">
-						<input type="number" id="utbi" min="1" max="10000" value="0" style="width:60px;"   />
-						<label id="UNTERE_GRENZE" for="utbi" ></label>	
-				</fieldset>
+              <p style="padding:0px;margin:0px;background-color:rgba(255,50,50,0.4);">
+                  <input type="number" id="otbi" min="1" max="10000" value="0" style="width:60px;"  />
+                  <label id="OBERE_GRENZE" for="otbi" ></label>
+              </p>
+              <hr/>
+              <p style="padding:0px;margin:0px;background-color:rgba(50,255,50,0.4);">
+                  <input type="number" id="utbi" min="1" max="10000" value="0" style="width:60px;"   />
+                  <label id="UNTERE_GRENZE" for="utbi" ></label>	
+          </fieldset>
 
-			</form>
+      </form>
 
-	  		<graph width="900" height="540" padding="50" ></graph>
+      <graph width="900" height="540" padding="50" ></graph>
 
-   		</article>	
-   		
-	   	<!-- LANGUAGE FILE EINBINDEN -->
-	    <script type="text/javascript" src="code/language.js"></script>     
-	    <script type="text/javascript" src="code/language.cn.js"></script>     
-	    <script type="text/javascript" src="code/language.de.js"></script>     
-	    <script type="text/javascript" src="code/language.en.js"></script>     
-	    <script type="text/javascript" src="code/language.fr.js"></script>        
-	    <script type="text/javascript" src="code/language.it.js"></script>        
-	
-		  <!-- PHARMACOKINETIC -->
-	    <script type="text/javascript" src="code/kinetics.js"></script>     
-	    
-	   	<script src="code/library.0.1.3.js"></script>
-	   	<script src="code/model.js"></script>
-	   	<script src="code/index.js"></script>
-	    <script>
-	      if( "addEventListener" in window )
-	      {
-	        App.initialize("kinetik.epha.ch");                     
-	      }
-	      else
-	      {
-	        DOM( document.body ).error("oldbrowser");
-	      } 
+    </article>	
+    
+    <!-- LANGUAGE FILE EINBINDEN -->
+    <script type="text/javascript" src="code/language.js"></script>     
+    <script type="text/javascript" src="code/language.cn.js"></script>     
+    <script type="text/javascript" src="code/language.de.js"></script>     
+    <script type="text/javascript" src="code/language.en.js"></script>     
+    <script type="text/javascript" src="code/language.fr.js"></script>        
+    <script type="text/javascript" src="code/language.it.js"></script>        
+      
+    <script src="code/library.0.1.3.js"></script>
+    <script src="code/kinetics.js"></script> 
+    <script>
+      if( "addEventListener" in window )
+      {
+        App.initialize("kinetik.epha.ch");                     
+      }
+      else
+      {
+        DOM( document.body ).error("oldbrowser");
+      } 
      </script>
-	   </body>
+  </body>
 </html>

@@ -1,9 +1,4 @@
-   
-	body {
-		position:relative;
-		overflow-y: auto;
-		overflow-x: hidden;
-	}
+
    		
  	#punkt:hover {
  	  stroke:rgba(50,50,50, 0.8);

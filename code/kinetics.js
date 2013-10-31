@@ -1,3 +1,196 @@
+/**
+  Copyright (C) 2013
+              _                 _     
+             | |               | |    
+    ___ _ __ | |__   __ _   ___| |__  
+   / _ \ '_ \| '_ \ / _` | / __| '_ \ 
+  |  __/ |_) | | | | (_| || (__| | | |
+   \___| .__/|_| |_|\__,_(_)___|_| |_|
+       | |                            
+       |_|        
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
+  FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.          
+ */
+
+var App = {
+
+  initialize: function()
+  {
+    // 0.AUGMENT
+    kontify(this);
+    // 1.MODEL
+    Model.init();
+    // 2.CONTROL
+    Controller.init();
+    // 3.VIEW
+    Intro.init();
+    Tafel.init();
+
+    this.bind();
+  }
+  ,
+  bind: function() 
+  {
+    Controller.on( Controller.SETUP, function() 
+    {
+      // domain, node, origin, live
+      App.enviroment();
+              
+      // tv || tablet || mobile || desktop
+      App.device = DOM().device();
+      
+      App.signOn( function( data ) 
+      {
+        Controller.dispatch(Controller.START);
+      });
+    });
+  }  
+};
+
+var Controller = {
+  
+  SETUP:    "SETUP",
+  START:    "START",
+  TAFEL:   "SEARCH"
+  ,
+  // ENVIROMENT
+  init: function(domain)
+  {
+    // AUGMENT
+    eventify(this);   
+    // BINDING
+    this.bind();
+  }
+  ,
+  // BINDING 
+  bind: function()
+  {
+    DOM(window).on("ready", function(){
+      Controller.dispatch(Controller.SETUP);
+    });
+  }
+};
+
+var Model = {
+   
+  resource: "data/fi_de.json"
+  ,
+  init: function()
+  {         
+    // AUGMENT
+    storify( this );
+
+    // DO
+    //this.getJSON();
+  }
+  ,
+  getJSON: function()
+  {
+    this.remote.read( this.resource, function(data)
+    {
+      if (data.status == 200)
+      {
+        Model.memory.set( "documents", data.message.documents, data.message._searchterms); 
+        Model.memory.set( "version", data.message.version );
+        
+        DOM( App.suchfeld ).removeAttrib( "disabled" , "disabled" );
+        DOM( App.suchfeld ).focus();
+      } 
+      else 
+      {
+        DOM( App.suchfeld ).attrib( "placeholder" , "zur Zeit nicht möglich" );             
+      }
+    });
+  }  
+};
+
+/**
+ * VIEWS
+ */
+var Intro = {
+
+  container: DOM("introId")
+  ,
+  init: function(){
+  
+    if (!App.live) console.log("- VIEW Intro");
+    
+    introfy( this );
+    
+    this.container.hide();    
+    this.bind();
+    this.setContent();
+  }
+  ,  
+  bind: function()
+  {
+    Controller.on( Controller.START, this.update ); 
+    
+    this.container.find(".button").on("touch", function(e)
+    {  
+      Intro.done();
+    });
+  }
+  ,  
+  setContent: function(){
+   
+    this.setTitle("Pharmakokinetik");
+    this.setClaim("Kinetik 1.Ordnung");
+    // add History
+    this.addFeatures(
+    [ 
+     {title: "Mehrsprachigkeit", description: "Als Sprachen sind Deutsch, Italienisch, Englisch oder Französisch wählbar"},
+     {title: "1. Dosis", description: "Festlegung mittels Bioverfügbarkeit F, Dosis D und Intervall Tau"},
+     {title: "2. Populationsdaten", description: "Eingabe der allgemeinen kinetischen Parameter"},
+     {title: "3. Plasmakonzentrationen", description: "Berechnung der individuellen kinetischen Parameter anhand der eingegebenen Messungen. Die Berechnung modelliert konstante Halbwertszeit und konstantes Verteilungsvolumen."},
+     {title: "4. Personalisierte Dosierung", description: "Anpassung der Populationsdaten anhand der individuellen Parameter und Anpassung der Dosis"}
+    ]);
+    
+    this.setDisclaimer();
+  }
+  ,
+  update: function()
+  {  
+    Intro.container.show();
+  }
+  , 
+  done:function()
+  {
+    Intro.container.hide();
+    Controller.dispatch( Controller.TAFEL );        
+  }
+};
+
+var Tafel = {
+  
+  container:DOM("graphId")
+  ,
+  init: function()
+  {
+    this.container.hide();
+      
+    this.bind();
+  }
+  ,
+  bind:function() 
+  {
+    Controller.on( Controller.TAFEL, function(data) 
+    {
+      var kinetics = new Kinetics();
+    
+      kinetics.start();
+      
+      Tafel.container.show();
+    });
+  }
+  
+};
+
+/* TOBE PUT INTO BIBILIOTHEK */
 
 	Kinetics = function() 
 	{
