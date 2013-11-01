@@ -141,13 +141,14 @@ var Intro = {
     this.setTitle("Pharmakokinetik");
     this.setClaim("Kinetik 1.Ordnung");
     // add History
+    this.setDetail("Zur Berechnung der individualisierten Kinetik empfehlen wir folgendes Vorgehen. Als Sprachen sind Deutsch, Italienisch, Englisch oder Französisch wählbar.");
     this.addFeatures(
     [ 
-     {title: "Mehrsprachigkeit", description: "Als Sprachen sind Deutsch, Italienisch, Englisch oder Französisch wählbar"},
-     {title: "1. Dosis", description: "Festlegung mittels Bioverfügbarkeit F, Dosis D und Intervall Tau"},
-     {title: "2. Populationsdaten", description: "Eingabe der allgemeinen kinetischen Parameter"},
-     {title: "3. Plasmakonzentrationen", description: "Berechnung der individuellen kinetischen Parameter anhand der eingegebenen Messungen. Die Berechnung modelliert konstante Halbwertszeit und konstantes Verteilungsvolumen."},
-     {title: "4. Personalisierte Dosierung", description: "Anpassung der Populationsdaten anhand der individuellen Parameter und Anpassung der Dosis"}
+     {title: "1. Dosis", description: "Eingabe mittels Bioverfügbarkeit F, Dosis D und Intervall Tau"},
+     {title: "2. Populationsdaten", description: "Festlegung der allgemeinen kinetischen Parameter aus der Fachinformation"},
+     {title: "3. Plasmakonzentrationen", description: "Die Berechnung modelliert konstante Halbwertszeit und konstantes Verteilungsvolumen"},
+     {title: "4. Personalisierte Kinetik", description: "Anpassung der Populationsdaten anhand der individuellen Parameter"},
+     {title: "5. Dosisanpassung", description:"Anpassung der Dosis durch Änderung von Dosierung und Dosierungsintervall bis die gewünschten Zielwerte erreicht sind."}
     ]);
     
     this.setDisclaimer();
