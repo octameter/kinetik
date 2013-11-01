@@ -6,6 +6,11 @@
   cursor: crosshair;
 }
 
+#graphId > div {
+  width: 900px;
+  margin: 0 auto;
+}
+
 #graphId form {
   position: relative;
   top: 20px;

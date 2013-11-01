@@ -156,7 +156,7 @@ var Intro = {
   ,
   update: function()
   {  
-    Intro.container.show();
+    ( DOM().hash() ) ? Intro.done() : Intro.container.show();
   }
   , 
   done:function()
