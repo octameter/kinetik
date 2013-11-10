@@ -138,8 +138,8 @@ var Intro = {
   ,  
   setContent: function(){
    
-    this.setTitle("Pharmakokinetik");
-    this.setClaim("Kinetik 1.Ordnung");
+    this.setTitle("Kinetik");
+    this.setClaim("Pharmakokinetik 1.Ordnung");
     // add History
     this.setDetail("Zur Berechnung der individualisierten Kinetik empfehlen wir folgendes Vorgehen. Als Sprachen sind Deutsch, Italienisch, Englisch oder Französisch wählbar.");
     this.addFeatures(
