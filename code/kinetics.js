@@ -130,9 +130,9 @@ var Intro = {
   {
     Controller.on( Controller.START, this.update ); 
     
-    this.container.find(".button").on("touch", function(e)
+    this.container.find(".button").on("tangent", function(data)
     {  
-      Intro.done();
+      if( data.type == "touchend") Intro.done();
     });
   }
   ,  
