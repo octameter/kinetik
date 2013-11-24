@@ -132,7 +132,11 @@ var Intro = {
     
     this.container.find(".button").on("tangent", function(data)
     {  
+<<<<<<< HEAD
       if( data.type == "touchend" ) Intro.done();
+=======
+      if( data.type == "touchend") Intro.done();
+>>>>>>> 5f92e4d280527eb98e030c363b98633c6f246563
     });
   }
   ,  
