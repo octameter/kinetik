@@ -130,9 +130,9 @@ var Intro = {
   {
     Controller.on( Controller.START, this.update ); 
     
-    this.container.find(".button").on("touch", function(e)
+    this.container.find(".button").on("tangent", function(data)
     {  
-      Intro.done();
+      if( data.type == "touchend" ) Intro.done();
     });
   }
   ,  
@@ -141,7 +141,7 @@ var Intro = {
     this.setTitle("Kinetik");
     this.setClaim("Pharmakokinetik 1.Ordnung");
     // add History
-    this.setDetail("Zur Berechnung der individualisierten Kinetik empfehlen wir folgendes Vorgehen. Als Sprachen sind Deutsch, Italienisch, Englisch oder Französisch wählbar.");
+    this.setDetail("Personalisierte Dosisberechnung");
     this.addFeatures(
     [ 
      {title: "1. Dosis", description: "Eingabe mittels Bioverfügbarkeit F, Dosis D und Intervall Tau"},
@@ -861,9 +861,6 @@ var Tafel = {
     		}
     		 
     	};
-
-
-
 
 function getElement(id) {
 	return document.getElementById(id);
